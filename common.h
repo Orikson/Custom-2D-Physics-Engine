@@ -9,8 +9,20 @@
 #include <ctime>
 #include <vector>
 #include <math.h>
+#include <sstream>
+#include <time.h>
 
 using namespace std;
+namespace patch
+{
+    template < typename T > string to_string( const T& n )
+    {
+        ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
+
 
 /*=======GLU/GLEW=======*/
 #include <GL/glew.h>
