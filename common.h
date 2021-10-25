@@ -15,12 +15,16 @@
 using namespace std;
 namespace patch
 {
-    template < typename T > string to_string( const T& n )
+    template <typename T> string to_string( const T& n )
     {
         ostringstream stm ;
         stm << n ;
         return stm.str() ;
     }
+}
+
+template<typename Base, typename T> inline bool instanceof(const T*) {
+    return std::is_base_of<Base, T>::value;
 }
 
 
@@ -39,5 +43,9 @@ namespace patch
 
 /*=======CLASS DEFINITIONS=======*/
 #include "Engine/Graphics/graphics.h"
+#include "Engine/Vectors/vector.h"
+#include "Engine/Shapes/shapes.h"
+#include "Engine/Shapes/ellipse.h"
+#include "Engine/Shapes/rectangle.h"
 
 #endif

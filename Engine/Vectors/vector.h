@@ -1,28 +1,46 @@
 /* n-Dimensional Vectors Class */
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef _VECTOR_H
+#define _VECTOR_H
 
 #include "../../common.h"
 
 class Vector {
     public:
-        // initialize vector (a variadic function)
-        void setvals(double contents...);
+        // construct vector (a variadic function)
+        // accepts ints, floats, and doubles
+        /* params:
+            * size: dimension of vector
+            * contents: contents of vector
+        */
+        template <typename... Types> Vector(int size, Types... contents);
 
         // add dimensions to vector (a variadic function)
-        void addvals(double contents...);
+        // accepts ints, floats, and doubles
+        template <typename Type, typename... Types> void addvals(Type item, Types... contents);
+        void addvals();
 
 
         // getter functions
         // gets vector value at given index
+        // kind of useless because vectorContents is public anyways
+        // .getAt(i) is equivalent to .vectorContents.at(i)
         double getAt(int index);
+
+        // gets size of vector
+        int getSize();
+
+        // gets magnitude of vector
+        double getMag();
+
 
         // setter functions
         // sets vector value at given index
-        double setAt(int index, double val);
+        // kind of useless because vectorContents is public anyways
+        // .setAt(i, val) is equivalent to .vectorContents.at(i) = val
+        void setAt(int index, double val);
         
-        // returns magnitude of vector
-        double magnitude();
+        // calculates magnitude of vector
+        double mag();
 
 
         /* -- general static functions -- */
@@ -30,7 +48,7 @@ class Vector {
         static double dot(Vector vector1, Vector vector2);
 
         // cross product (returns a new Vector object)
-        static Vector cross(Vector vector1, Vector vector2);
+        static Vector cross(Vector vector3D1, Vector vector3D2);
 
 
         /* -- mutator vector functions -- */  
@@ -84,12 +102,22 @@ class Vector {
         // multiply by scalar; Bi = Ai * S
         static Vector multScalar(Vector vector, double scalar);
 
+        // used to store contents of the vector
+        vector<double> vectorContents;
 
     protected:
-        double* contents;
+
+        // size of vector
+        int vectorSize;
+
+        // magnitude of vector
+        double magnitude;
+
 
         
 
 };
+
+#include "vector.cpp"
 
 #endif

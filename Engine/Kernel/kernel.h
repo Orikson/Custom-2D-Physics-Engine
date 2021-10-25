@@ -18,6 +18,6 @@ class Kernel {
 
 bool Kernel::isRunning = true;
 
-#include "Kernel.cpp"
+#include "kernel.cpp"
 
 #endif
