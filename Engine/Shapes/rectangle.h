@@ -6,11 +6,12 @@
 
 class Rectangle: public Shape {
     public:
+        Rectangle(Vector position, Vector rotation, double mass, Vector dimensions);
         Vector getDim();
         void setDim();
 
         /* overrided functions from Shape */
-        void draw();
+        void draw2D();
         void update();
         void collideWith();
     

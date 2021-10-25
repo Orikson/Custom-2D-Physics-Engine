@@ -14,6 +14,9 @@ class Vector {
         */
         template <typename... Types> Vector(int size, Types... contents);
 
+        // default constructor
+        Vector();
+
         // add dimensions to vector (a variadic function)
         // accepts ints, floats, and doubles
         template <typename Type, typename... Types> void addvals(Type item, Types... contents);
