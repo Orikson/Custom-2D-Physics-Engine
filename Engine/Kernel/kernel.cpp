@@ -20,14 +20,14 @@ int Kernel::start() {
     // Define shapes
     vector<Rectangle> shapes;
 
-    shapes.push_back(Rectangle(
-        Vector(2,0,0.5),          //position (2,x,y)
-        Vector(1,0),            //rotation (1,theta)
-        5,                      //mass (kg)
-        Color(255., 0., 0.),    //fillcolor
-        Color(255., 0., 0.),    //strokecolor
-        Vector(2,0.5,0.25)      //dimensions (2,w,h)
-    ));
+    Vector pos = Vector(2,0,0.5);        //position (2,x,y)
+    Vector rot = Vector(1,0);            //rotation (1,theta)
+    double mass = 5;                     //mass (kg)
+    Color fill = Color(255., 0., 0.);    //fillcolor
+    Color stroke = Color(255., 0., 0.);  //strokecolor
+    Vector dim = Vector(2,0.5,0.25);     //dimensions (2,w,h)
+    
+    shapes.push_back(Rectangle(pos, rot, mass, fill, stroke, dim));
     
     // Main loop
     bool isRunning = true;
@@ -36,7 +36,7 @@ int Kernel::start() {
         iFrame += 1;
 
         // Update
-        update(iFrame, t1);
+        update(iFrame, t1, shapes);
 
         // Draw
         render(window, iFrame, shapes);
@@ -82,7 +82,7 @@ SDL_Window* Kernel::createWindow(const char* windowTitle, int width, int height)
     return window;
 }
 
-void Kernel::update(int iFrame, clock_t iClock) {
+void Kernel::update(int iFrame, clock_t iClock, vector<Rectangle> &shapes) {
     // User Updates:
     double theta = (double)iFrame/10000;
     
@@ -91,6 +91,10 @@ void Kernel::update(int iFrame, clock_t iClock) {
     float diff = ((float)t2-(float)iClock) / CLOCKS_PER_SEC;
     
     cout << "\rFrame: " + patch::to_string(iFrame) + "\tTime Passed (sec): " + patch::to_string(diff);
+
+    for (Rectangle shape : shapes) {
+        shape.update();
+    }
 }
 
 void Kernel::render(SDL_Window* window, int iFrame, vector<Rectangle> &shapes) {

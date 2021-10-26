@@ -59,7 +59,7 @@ double Vector::getMag() {
 
 // sets vector value at given index
 void Vector::setAt(int index, double val) {
-    vectorContents.at(index) = val;
+    vectorContents[index] = val;
 }
 
 

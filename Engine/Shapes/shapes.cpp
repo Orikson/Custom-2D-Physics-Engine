@@ -6,14 +6,8 @@
  * @param fillColor 3D vector representing the fill color of the shape 
  * @param strokeColor 3D vector representing the stroke color of the shape (applicable only in 2D drawing)
  */
-Shape::Shape(Vector position, Vector rotation, double massOf, Color fillColor, Color strokeColor) {
-    com = position;
-    rot = rotation;
-    mass = massOf;
-    size = position.getSize();
-
-    fillColor3f = fillColor;
-    strokeColor3f = strokeColor;
+Shape::Shape(Vector &position, Vector &rotation, double &massOf, Color &fillColor, Color &strokeColor) : com(position), rot(rotation), mass(massOf), size(position.getSize()), fillColor3f(fillColor), strokeColor3f(strokeColor) {
+    
 }
 
 /**

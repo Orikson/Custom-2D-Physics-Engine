@@ -6,7 +6,7 @@
 
 class Rectangle: public Shape {
     public:
-        Rectangle(Vector position, Vector rotation, double mass, Color fillColor, Color strokeColor, Vector dimensions);
+        Rectangle(Vector &position, Vector &rotation, double &mass, Color &fillColor, Color &strokeColor, Vector &dimensions);
         Vector getDim();
         void setDim(int index, double value);
 
@@ -17,15 +17,24 @@ class Rectangle: public Shape {
         void binIterate(int depth, vector<int> &iv, void (Rectangle::*f)(vector<int> &));
         void grayIterate(int depth, void (Rectangle::*f)(vector<int> &));
 
+        void updateVertices();
+
         /* overrided functions from Shape */
         
         void draw2D() override;
         void update() override;
         bool collideWith(Shape shape) override;
+
+        
+        // array containing vectors indicating the direction of edges originating from the vertex of the same index
+        vector<Vector> &edges;
+
+        // array containing vectors indicating the positions of verticies
+        vector<Vector> &verticies;
     
     protected:
         // dimension of rectangle
-        Vector dim;
+        Vector &dim;
 
 
 };

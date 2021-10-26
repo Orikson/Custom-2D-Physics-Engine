@@ -54,6 +54,9 @@ void Rectangle::grayIterate(int depth, void (Rectangle::*f)(vector<int> &)) {
     }
 }
 
+vector<Vector> edge;
+vector<Vector> vert;
+
 /**
  * Rectangle constructor that initializes edge and vertex vectors and relevant properties of the n-dimensional rectoid. 
  * Rotation is defined as angles away from previously defined angles (e.g. theta -> angle away from x towards y, phi -> angle away from z towards the plane xy, etc.) 
@@ -65,12 +68,11 @@ void Rectangle::grayIterate(int depth, void (Rectangle::*f)(vector<int> &)) {
  * @param strokeColor 3D vector representing the stroke color of the shape (applicable only in 2D drawing)
  * @param dimensions dimensions of the n-dimensional rectoid
  */
-Rectangle::Rectangle(Vector position, Vector rotation, double massOf, Color fillColor, Color strokeColor, Vector dimensions) : Shape(position, rotation, massOf, fillColor, strokeColor) {
-    dim = dimensions;
-
+Rectangle::Rectangle(Vector &position, Vector &rotation, double &massOf, Color &fillColor, Color &strokeColor, Vector &dimensions) : Shape(position, rotation, massOf, fillColor, strokeColor), dim(dimensions), edges(edge), verticies(vert) {
     // 2d has 4 points, 3d has 8, 4d has 16 (2^n points for dimensions n)
+    verticies.clear();
+    edges.clear();
     grayIterate(dim.getSize(), vertex);
-
 }
 
 /**
@@ -113,7 +115,6 @@ void Rectangle::draw2D() {
     glBegin(GL_POLYGON);
     
     for (int i = 0; i < verticies.size(); i ++) {//(Vector v : verticies) {
-        //cout << verticies[i].getAt(0) << " " << verticies[i].getAt(1);
         fillColor3f.fill(); glVertex3f(verticies[i].getAt(0), verticies[i].getAt(1), 0);
     }
 
@@ -126,7 +127,19 @@ void Rectangle::draw2D() {
  * 
  */
 void Rectangle::update() {
+    for (int i=0; i < com.getSize(); i++) {
+        com.setAt(i, cos(com.getAt(i)));
+    }
 
+    updateVertices();
+}
+
+/**
+ * Update vertex positions based on updates to com and rot
+ */
+void Rectangle::updateVertices() {
+    verticies.clear();
+    grayIterate(dim.getSize(), vertex);
 }
 
 
