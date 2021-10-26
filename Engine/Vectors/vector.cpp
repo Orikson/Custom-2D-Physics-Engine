@@ -2,17 +2,29 @@
 
 // Vector class constructor 
 // accepts ints, doubles, and floats
+
+/**
+ * Vector class constructor that accepts ints, doubles, and floats
+ * @param size an integer representing the size of the vector
+ * @param contents... integers, doubles, and floats (anything that can be cast to double) that compromise the vector
+ */
 template <typename... Types> Vector::Vector(int size, Types... contents) {
     vectorSize = size;
     addvals(contents...);
     magnitude = mag();
 }
 
+// Default constructor
+Vector::Vector() {}
 
 /* Vector class functions */
 
-// Adds values to the vector (increases dimension of the vector)
-// accepts ints, doubles, and floats
+/** 
+ * Adds values to the vector (increases dimension of the vector). 
+ * Accepts ints, doubles, and floats (anything that can be cast to double)
+ * @param item required item to add to the vector
+ * @param contents... additional items to add to the vector
+ */
 template <typename Type, typename... Types> void Vector::addvals(Type item, Types... contents) {
     try {
         vectorContents.push_back((double)item);

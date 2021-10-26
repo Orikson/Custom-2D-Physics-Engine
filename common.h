@@ -44,6 +44,7 @@ template<typename Base, typename T> inline bool instanceof(const T*) {
 /*=======CLASS DEFINITIONS=======*/
 #include "Engine/Graphics/graphics.h"
 #include "Engine/Vectors/vector.h"
+#include "Engine/Shapes/color.h"
 #include "Engine/Shapes/shapes.h"
 #include "Engine/Shapes/ellipse.h"
 #include "Engine/Shapes/rectangle.h"

@@ -6,14 +6,21 @@
 
 class Rectangle: public Shape {
     public:
-        Rectangle(Vector position, Vector rotation, double mass, Vector dimensions);
+        Rectangle(Vector position, Vector rotation, double mass, Color fillColor, Color strokeColor, Vector dimensions);
         Vector getDim();
-        void setDim();
+        void setDim(int index, double value);
+
+        // function to load verticies
+        void vertex(vector<int> &iv);
+
+        // helper vertex loader
+        void binIterate(int depth, vector<int> &iv, void (Rectangle::*f)(vector<int> &));
 
         /* overrided functions from Shape */
+        
         void draw2D();
         void update();
-        void collideWith();
+        bool collideWith(Shape shape);
     
     protected:
         // dimension of rectangle
