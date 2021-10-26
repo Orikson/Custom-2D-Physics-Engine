@@ -11,8 +11,8 @@ class Kernel {
 
         int initSDL();
         SDL_Window* createWindow(const char* windowTitle, int width, int height);
-        void update();
-        void render(SDL_Window* window, int iFrame, clock_t iClock);
+        void update(int iFrame, clock_t iClock);
+        void render(SDL_Window* window, int iFrame, vector<Rectangle> &shapes);
         void cleanUp(SDL_Window* window, SDL_GLContext &glContext);
 };
 

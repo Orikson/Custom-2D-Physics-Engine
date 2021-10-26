@@ -15,12 +15,13 @@ class Rectangle: public Shape {
 
         // helper vertex loader
         void binIterate(int depth, vector<int> &iv, void (Rectangle::*f)(vector<int> &));
+        void grayIterate(int depth, void (Rectangle::*f)(vector<int> &));
 
         /* overrided functions from Shape */
         
-        void draw2D();
-        void update();
-        bool collideWith(Shape shape);
+        void draw2D() override;
+        void update() override;
+        bool collideWith(Shape shape) override;
     
     protected:
         // dimension of rectangle

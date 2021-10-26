@@ -16,6 +16,18 @@ int Kernel::start() {
     int iFrame = 0;
     clock_t t1;
     t1 = clock();
+
+    // Define shapes
+    vector<Rectangle> shapes;
+
+    shapes.push_back(Rectangle(
+        Vector(2,0,0.5),          //position (2,x,y)
+        Vector(1,0),            //rotation (1,theta)
+        5,                      //mass (kg)
+        Color(255., 0., 0.),    //fillcolor
+        Color(255., 0., 0.),    //strokecolor
+        Vector(2,0.5,0.25)      //dimensions (2,w,h)
+    ));
     
     // Main loop
     bool isRunning = true;
@@ -24,10 +36,10 @@ int Kernel::start() {
         iFrame += 1;
 
         // Update
-        update();
+        update(iFrame, t1);
 
         // Draw
-        render(window, iFrame, t1);
+        render(window, iFrame, shapes);
     }
 
     // Free resources
@@ -70,11 +82,8 @@ SDL_Window* Kernel::createWindow(const char* windowTitle, int width, int height)
     return window;
 }
 
-void Kernel::update() {
-
-}
-
-void Kernel::render(SDL_Window* window, int iFrame, clock_t iClock) {
+void Kernel::update(int iFrame, clock_t iClock) {
+    // User Updates:
     double theta = (double)iFrame/10000;
     
     clock_t t2;
@@ -82,32 +91,23 @@ void Kernel::render(SDL_Window* window, int iFrame, clock_t iClock) {
     float diff = ((float)t2-(float)iClock) / CLOCKS_PER_SEC;
     
     cout << "\rFrame: " + patch::to_string(iFrame) + "\tTime Passed (sec): " + patch::to_string(diff);
+}
 
+void Kernel::render(SDL_Window* window, int iFrame, vector<Rectangle> &shapes) {
+    double theta = (double)iFrame/10000;
+    
+    // Setup gl environment
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Background color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    // Triangle
-    /*glBegin(GL_POLYGON);
-    glColor3f(1, 0, 0); glVertex3f(-0.6*cos(theta)+0.75*sin(theta), -0.6*sin(theta)-0.75*cos(theta), 0.5);
-    glColor3f(0, 1, 0); glVertex3f(0.6*cos(theta)+0.75*sin(theta), 0.6*sin(theta)-0.75*cos(theta), 0);
-    glColor3f(0, 0, 1); glVertex3f(-0.75*sin(theta), 0.75*cos(theta), 0);
-    glEnd();*/
-
-    // Create the circle in the coordinates origin
-    const int sides = 40;  // The amount of segment to create the circle
-    const double radius = 0.5; // The radius of the circle
-
-    glBegin(GL_POLYGON);
-    
-    for (int a = 0; a < 360; a += 360 / sides)
-    {
-        double heading = a * 3.1415926535897932384626433832795 / 180;
-        glColor3f(1, 0, 0); glVertex3f(cos(heading) * radius, sin(heading) * radius, 0.5);
+    // draw shapes
+    for (Rectangle shape : shapes) {
+        shape.draw2D();
     }
 
-    glEnd();
-
-    // Flush drawing command buffer to make drawing happen as soon as possible.
+    
+    // flush gl context to screen
     glFlush();
 
     SDL_GL_SwapWindow(window);
