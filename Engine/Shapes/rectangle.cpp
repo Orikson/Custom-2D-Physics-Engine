@@ -8,7 +8,7 @@
 void Rectangle::binIterate(int depth, vector<int> &iv, void (Rectangle::*f)(vector<int> &)){
     if (depth > 0) {
         for (int i = 0; i < 2; i ++) {
-            iv[depth-1] = i;
+            iv.at(depth-1) = i;
             Rectangle::binIterate(depth-1, iv, f);
         }
     } else {
@@ -25,37 +25,33 @@ void Rectangle::binIterate(int depth, vector<int> &iv, void (Rectangle::*f)(vect
  */
 void Rectangle::grayIterate(int depth, void (Rectangle::*f)(vector<int> &)) {
     vector<string> arr; 
-
-    arr.push_back("0"); 
-    arr.push_back("1"); 
-  
-    int i, j; 
-    for (i=2; i < (1<<depth); i = i<<1) { 
-        for (j=i-1; j >= 0; j--) 
-            arr.push_back(arr[j]); 
-  
-        for (j=0; j < i; j++) 
-            arr[j] = "0" + arr[j];
-  
-        for (j=i; j < 2*i; j++) 
-            arr[j] = "1" + arr[j];
-    }
     
-    for (i = 0 ; i < arr.size() ; i++ ) { 
+    arr.push_back("0");
+    arr.push_back("1");
+    
+    int i, j; 
+    for (i = 2; i < (1 << depth); i = i << 1) { 
+        for (j=i-1; j >= 0; j--)
+            arr.push_back(arr.at(j)); 
+  
+        for (j=0; j < i; j++)
+            arr.at(j) = "0" + arr.at(j);
+
+        for (j=i; j < 2*i; j++) 
+            arr.at(j) = "1" + arr.at(j);
+    }
+    for (i = 0; i < (int)arr.size(); i ++) { 
         vector<int> iv;
-        for (char const &c: arr[i]) {
+        for (char const &c: arr.at(i)) {
             if (c == '0') {
                 iv.push_back(0);
             } else if (c == '1') {
                 iv.push_back(1);
             }
-        } 
+        }
         (this->*f)(iv);
     }
 }
-
-vector<Vector> edge;
-vector<Vector> vert;
 
 /**
  * Rectangle constructor that initializes edge and vertex vectors and relevant properties of the n-dimensional rectoid. 
@@ -68,11 +64,33 @@ vector<Vector> vert;
  * @param strokeColor 3D vector representing the stroke color of the shape (applicable only in 2D drawing)
  * @param dimensions dimensions of the n-dimensional rectoid
  */
-Rectangle::Rectangle(Vector &position, Vector &rotation, double &massOf, Color &fillColor, Color &strokeColor, Vector &dimensions) : Shape(position, rotation, massOf, fillColor, strokeColor), dim(dimensions), edges(edge), verticies(vert) {
+Rectangle::Rectangle(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &accel, Vector &jerk, Vector &dimensions) : 
+    Shape(position, rotation, massOf, fillColor, strokeColor, velocity, accel, jerk), dim(dimensions) {
     // 2d has 4 points, 3d has 8, 4d has 16 (2^n points for dimensions n)
-    verticies.clear();
-    edges.clear();
+    
+    vector<Vector*> verticies;
+    verticies.reserve(dim.getSize());
+
+    vector<Vector*> edges;
+    edges.reserve(dim.getSize());
+
     grayIterate(dim.getSize(), vertex);
+}
+
+/**
+ * Default Rectangle constructor
+ */
+Rectangle::Rectangle() {
+
+}
+
+/**
+ * Default Rectangle destructor
+ */
+Rectangle::~Rectangle() {
+    //delete edges;
+    //delete verticies;
+    //delete dim;
 }
 
 /**
@@ -81,7 +99,7 @@ Rectangle::Rectangle(Vector &position, Vector &rotation, double &massOf, Color &
  */
 void Rectangle::vertex(vector<int> &iv) {
     Vector nVertex = Vector(3); 
-    for (int i=0; i < iv.size(); i ++) {
+    for (int i=0; i < (int)iv.size(); i ++) {
         int adj = iv.at(i)*2-1;
         double res = com.getAt(i) + dim.getAt(i) / 2 * adj;
         nVertex.addvals(res); // vertex at Vi = Xi + W/2*(+-1)
@@ -114,8 +132,8 @@ void Rectangle::setDim(int index, double value) {
 void Rectangle::draw2D() {
     glBegin(GL_POLYGON);
     
-    for (int i = 0; i < verticies.size(); i ++) {//(Vector v : verticies) {
-        fillColor3f.fill(); glVertex3f(verticies[i].getAt(0), verticies[i].getAt(1), 0);
+    for (int i = 0; i < (int)verticies.size(); i ++) {//(Vector v : verticies) {
+        fillColor3f.fill(); glVertex3f(verticies.at(i).getAt(0), verticies.at(i).getAt(1), 0);
     }
 
     glEnd();
@@ -127,9 +145,9 @@ void Rectangle::draw2D() {
  * 
  */
 void Rectangle::update() {
-    for (int i=0; i < com.getSize(); i++) {
-        com.setAt(i, cos(com.getAt(i)));
-    }
+    //for (int i=0; i < com.getSize(); i++) {
+    //    com.setAt(i, sin(com.getAt(i)));
+    //}
 
     updateVertices();
 }
@@ -139,6 +157,7 @@ void Rectangle::update() {
  */
 void Rectangle::updateVertices() {
     verticies.clear();
+
     grayIterate(dim.getSize(), vertex);
 }
 

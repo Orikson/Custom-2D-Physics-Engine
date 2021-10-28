@@ -9,13 +9,57 @@
  * @param contents... integers, doubles, and floats (anything that can be cast to double) that compromise the vector
  */
 template <typename... Types> Vector::Vector(int size, Types... contents) {
-    vectorSize = size;
+    //init pointers
+    vectorSize = new int;
+    *vectorSize = size;
+
+    magnitude = new double;
+    vectorContents = new vector<double>;
+    vectorContents->reserve(*vectorSize);
+
     addvals(contents...);
-    magnitude = mag();
+    *magnitude = mag();
 }
 
 // Default constructor
-Vector::Vector() {}
+Vector::Vector() {
+    vectorSize = new int;
+    *vectorSize = 1;
+
+    magnitude = new double;
+    vectorContents = new vector<double>;
+    vectorContents->reserve(*vectorSize);
+
+    *magnitude = 0;
+    vectorContents->push_back(0);
+}
+
+/**
+ * Copy Constructor
+ * @param vector a vector to make a copy of
+ */
+Vector::Vector(const Vector &vectorDef) {
+    vectorSize = new int;
+    *vectorSize = *vectorDef.vectorSize;
+    
+    magnitude = new double;
+    vectorContents = new vector<double>;
+    vectorContents->reserve(*vectorSize);
+
+    for (double n : *vectorDef.vectorContents) {
+        addvals(n);
+    }
+    *magnitude = *vectorDef.magnitude;
+}
+
+/**
+ * Vector destructor
+ */
+Vector::~Vector() {
+    delete vectorContents;
+    delete vectorSize;
+    delete magnitude;
+}
 
 /* Vector class functions */
 
@@ -27,31 +71,33 @@ Vector::Vector() {}
  */
 template <typename Type, typename... Types> void Vector::addvals(Type item, Types... contents) {
     try {
-        vectorContents.push_back((double)item);
+        vectorContents->push_back((double)item);
         addvals(contents...);
     } catch(...) {
         throw runtime_error("item not of type int, double, or float");
     }
 }
 // placeholder to terminate variadic function recursively
-void Vector::addvals() { vectorSize = vectorContents.size(); }
+void Vector::addvals() {
+    *vectorSize = (int)vectorContents->size(); 
+}
 
 
 /* Getter functions */
 
 // gets non-mutable vector value at given index
 double Vector::getAt(int index) {
-    return vectorContents.at(index);
+    return vectorContents->at(index);
 }
 
 // gets size of vector
 int Vector::getSize() {
-    return vectorSize;
+    return *vectorSize;
 }
 
 // gets magnitude of vector
 double Vector::getMag() {
-    return magnitude;
+    return *magnitude;
 }
 
 
@@ -59,7 +105,7 @@ double Vector::getMag() {
 
 // sets vector value at given index
 void Vector::setAt(int index, double val) {
-    vectorContents[index] = val;
+    vectorContents->at(index) = val;
 }
 
 
@@ -68,7 +114,7 @@ void Vector::setAt(int index, double val) {
 // returns magnitude of vector
 double Vector::mag() {
     double mag = 0.0;
-    for (double n : vectorContents) {
+    for (double n : *vectorContents) {
         mag += n*n;
     }
     return sqrt(mag);

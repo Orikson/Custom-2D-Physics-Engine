@@ -16,19 +16,34 @@ int Kernel::start() {
     int iFrame = 0;
     clock_t t1;
     t1 = clock();
+    
+    cout << "Setup Complete" << "\n";
 
     // Define shapes
-    vector<Rectangle> shapes;
+    vector<Rectangle*> shapes;
+    shapes.reserve(3);
+    
+    int iterator = 0;
+    while (iterator < 1) {
+        Vector pos(2,0,0.5);//-1+i/3,0.5);  //position (2,x,y)
+        Vector rot(1,0);           //rotation (1,theta)
+        double mass = 5;                         //mass (kg)
+        Color fill(1.,0.,0.);       //fillcolor
+        Color stroke(1.,0.,0.);     //strokecolor
+        Vector dim(2,0.5,0.25);    //dimensions (2,w,h)
+        Vector velocity(2,0,0);
+        Vector accel(2,0,0);
+        Vector jerk(2,0,0);
+        //vector<Vector> edge;
+        //vector<Vector> vert;
 
-    Vector pos = Vector(2,0,0.5);        //position (2,x,y)
-    Vector rot = Vector(1,0);            //rotation (1,theta)
-    double mass = 5;                     //mass (kg)
-    Color fill = Color(255., 0., 0.);    //fillcolor
-    Color stroke = Color(255., 0., 0.);  //strokecolor
-    Vector dim = Vector(2,0.5,0.25);     //dimensions (2,w,h)
-    
-    shapes.push_back(Rectangle(pos, rot, mass, fill, stroke, dim));
-    
+        Rectangle* rect = new Rectangle(pos, rot, mass, fill, stroke, velocity, accel, jerk, dim);
+
+        shapes.push_back(rect);
+        
+        iterator += 1;
+    }
+
     // Main loop
     bool isRunning = true;
     while (isRunning) {
@@ -36,10 +51,10 @@ int Kernel::start() {
         iFrame += 1;
 
         // Update
-        update(iFrame, t1, shapes);
+        update(iFrame, t1, &shapes);
 
         // Draw
-        render(window, iFrame, shapes);
+        render(window, iFrame, &shapes);
     }
 
     // Free resources
@@ -82,7 +97,7 @@ SDL_Window* Kernel::createWindow(const char* windowTitle, int width, int height)
     return window;
 }
 
-void Kernel::update(int iFrame, clock_t iClock, vector<Rectangle> &shapes) {
+void Kernel::update(int iFrame, clock_t iClock, vector<Rectangle*>* shapes) {
     // User Updates:
     double theta = (double)iFrame/10000;
     
@@ -92,12 +107,12 @@ void Kernel::update(int iFrame, clock_t iClock, vector<Rectangle> &shapes) {
     
     cout << "\rFrame: " + patch::to_string(iFrame) + "\tTime Passed (sec): " + patch::to_string(diff);
 
-    for (Rectangle shape : shapes) {
-        shape.update();
+    for (int i = 0; i < shapes->size(); i ++) {
+        shapes->at(i)->update();
     }
 }
 
-void Kernel::render(SDL_Window* window, int iFrame, vector<Rectangle> &shapes) {
+void Kernel::render(SDL_Window* window, int iFrame, vector<Rectangle*>* shapes) {
     double theta = (double)iFrame/10000;
     
     // Setup gl environment
@@ -106,10 +121,10 @@ void Kernel::render(SDL_Window* window, int iFrame, vector<Rectangle> &shapes) {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     // draw shapes
-    for (Rectangle shape : shapes) {
-        shape.draw2D();
+    for (int i = 0; i < shapes->size(); i ++) {
+        shapes->at(i)->draw2D();
     }
-
+    
     
     // flush gl context to screen
     glFlush();

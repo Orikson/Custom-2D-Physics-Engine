@@ -7,7 +7,8 @@
 class Shape {
     public:
         Shape();
-        Shape(Vector &position, Vector &rotation, double &massOf, Color &fillColor, Color &strokeColor);
+        Shape(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &accel, Vector &jerk);
+        ~Shape();
 
         // draw function can only be called within the gl graphics context as it calls gl related functions
         // draws the shape
@@ -22,7 +23,7 @@ class Shape {
 
     protected:
         // center of mass of shape (determined by the object)
-        Vector &com;
+        Vector com;
 
         // velocity vector of shape
         Vector vel;
@@ -34,19 +35,19 @@ class Shape {
         Vector jrk;
 
         // rotation of the object (relative as determined by the object)
-        Vector &rot;
+        Vector rot;
 
         // mass of the object
-        double &mass;
+        double mass;
 
         // dimension order
-        double size;
+        int size;
 
         // fill color of object
-        Color &fillColor3f;
+        Color fillColor3f;
 
         // stroke color of object
-        Color &strokeColor3f;
+        Color strokeColor3f;
 
 };
 

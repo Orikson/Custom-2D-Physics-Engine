@@ -17,6 +17,12 @@ class Vector {
         // default constructor
         Vector();
 
+        // copy constructor
+        Vector(const Vector &vector);
+
+        // destructor
+        ~Vector();
+
         // add dimensions to vector (a variadic function)
         // accepts ints, floats, and doubles
         template <typename Type, typename... Types> void addvals(Type item, Types... contents);
@@ -106,15 +112,15 @@ class Vector {
         static Vector multScalar(Vector vector, double scalar);
 
         // used to store contents of the vector
-        vector<double> vectorContents;
+        vector<double> *vectorContents;
 
     protected:
 
         // size of vector
-        int vectorSize;
+        int *vectorSize;
 
         // magnitude of vector
-        double magnitude;
+        double *magnitude;
 
 
         

@@ -6,7 +6,10 @@
 
 class Rectangle: public Shape {
     public:
-        Rectangle(Vector &position, Vector &rotation, double &mass, Color &fillColor, Color &strokeColor, Vector &dimensions);
+        Rectangle(Vector &position, Vector &rotation, double mass, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &accel, Vector &jerk, Vector &dimensions);//, vector<Vector> &edge, vector<Vector> &vert);
+        Rectangle();
+        ~Rectangle();
+        
         Vector getDim();
         void setDim(int index, double value);
 
@@ -27,14 +30,13 @@ class Rectangle: public Shape {
 
         
         // array containing vectors indicating the direction of edges originating from the vertex of the same index
-        vector<Vector> &edges;
+        vector<Vector> edges;
 
         // array containing vectors indicating the positions of verticies
-        vector<Vector> &verticies;
+        vector<Vector> verticies;
     
-    protected:
         // dimension of rectangle
-        Vector &dim;
+        Vector dim;
 
 
 };
