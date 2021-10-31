@@ -126,7 +126,7 @@ void Rectangle::setDim(int index, double value) {
 
 
 /**
- * Draw a 2D cross-section of rectoid. Must be called within a gl context, 
+ * Draw a 2D cross-section of rectoid. Must be called within a gl context
  * 
  */
 void Rectangle::draw2D() {
@@ -144,10 +144,16 @@ void Rectangle::draw2D() {
  * Update rectangle position, velocity, acceleration, and jerk, as well as other physical properties related to angular momentum
  * 
  */
-void Rectangle::update() {
-    //for (int i=0; i < com.getSize(); i++) {
-    //    com.setAt(i, sin(com.getAt(i)));
-    //}
+void Rectangle::update(double dT) {
+    acl.mAdd(jrk);
+    vel.mAdd(acl);
+    com.mAdd(vel);
+    //if (com.vectorContents->at(1) < -0.5) { vel.vectorContents->at(1) *= -1; }
+    // collision with floor
+    if (com.vectorContents->at(1) - dim.vectorContents->at(1) / 2 < -1.0) {
+        com.vectorContents->at(1) = -1. + dim.vectorContents->at(1);
+        vel.vectorContents->at(1) *= -0.95;
+    }
 
     updateVertices();
 }

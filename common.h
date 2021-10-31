@@ -1,6 +1,10 @@
 #ifndef _COMMON_H
 #define _COMMON_H
 
+/*=======USEFUL MATH CONSTANTS=======*/
+#define PI 3.141592653589793238462643383279502884197169399375105820974944592307816
+
+
 /*=======STANDARD TEMPLATE LIBRARY=======*/
 #include <iostream>
 #include <string>
@@ -11,6 +15,11 @@
 #include <math.h>
 #include <sstream>
 #include <time.h>
+#include <limits>
+#include <iomanip>
+extern "C" {
+    #include <unistd.h>
+}
 
 using namespace std;
 namespace patch
@@ -46,7 +55,7 @@ template<typename Base, typename T> inline bool instanceof(const T*) {
 #include "Engine/Vectors/vector.h"
 #include "Engine/Shapes/color.h"
 #include "Engine/Shapes/shapes.h"
-#include "Engine/Shapes/ellipse.h"
+#include "Engine/Shapes/circle.h"
 #include "Engine/Shapes/rectangle.h"
 
 #endif

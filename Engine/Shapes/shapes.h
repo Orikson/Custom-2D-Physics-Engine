@@ -16,7 +16,7 @@ class Shape {
 
         // update function can only be called within the gl graphics context as it calls gl related functions
         // updates position, velocity, acceleration, net forces, etc.
-        virtual void update();
+        virtual void update(double dT);
 
         // checks for a collision with another object
         virtual bool collideWith(Shape shape);

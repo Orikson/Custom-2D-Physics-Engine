@@ -54,8 +54,9 @@ void Shape::draw2D() {}
 
 /**
  * Empty function to be overrided by subclasses of Shape
+ * @param iTime happy compiler happy life
  */
-void Shape::update() {}
+void Shape::update(double dT) {}
 
 /**
  * Empty function to be overrided by subclasses of Shape

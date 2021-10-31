@@ -25,7 +25,7 @@ class Rectangle: public Shape {
         /* overrided functions from Shape */
         
         void draw2D() override;
-        void update() override;
+        void update(double dT) override;
         bool collideWith(Shape shape) override;
 
         

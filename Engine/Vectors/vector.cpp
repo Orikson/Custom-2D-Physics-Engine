@@ -156,7 +156,11 @@ void Vector::mNorm() {}
 void Vector::mNeg() {}
 
 // adds the vector to the given vector in the form Ai = Ai + Bi
-void Vector::mAdd(Vector vector) {}
+void Vector::mAdd(Vector vector) {
+    for (int i = 0; i < vectorContents->size(); i ++) {
+        vectorContents->at(i) += vector.vectorContents->at(i);
+    }
+}
 
 // subtracts the given vector from the vector in the form Ai = Ai - Bi
 void Vector::mSubtract(Vector vector) {}
@@ -195,4 +199,12 @@ Vector Vector::pointwiseDivision(Vector vector1, Vector vector2) {}
 Vector Vector::addScalar(Vector vector, double scalar) {}
 
 // multiplies a scalar to each component of the given vector, and returns a new one, in the form Bi = Ai * S
-Vector Vector::multScalar(Vector vector, double scalar) {}
+Vector Vector::multScalar(Vector vector, double scalar) {
+    scalar = scalar;
+    Vector nVector = Vector();
+    for (int i = 0; i < vector.vectorContents->size(); i ++) {
+        cout << "\n" << vector.getAt(i) * scalar;
+        nVector.addvals(vector.getAt(i) * scalar);
+    }
+    return nVector;
+}
