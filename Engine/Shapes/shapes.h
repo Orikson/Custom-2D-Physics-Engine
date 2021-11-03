@@ -19,7 +19,7 @@ class Shape {
         virtual void update(double dT);
 
         // checks for a collision with another object
-        virtual bool collideWith(Shape shape);
+        virtual Collision collideWith(Shape shape);
 
     protected:
         // center of mass of shape (determined by the object)

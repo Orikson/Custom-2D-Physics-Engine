@@ -30,8 +30,8 @@ int Kernel::start() {
     shapes.reserve(3);
     
     int iterator = 0;
-    while (iterator < 2) {
-        Vector pos(2,-0.5+iterator,0.5);    //position (2,x,y)
+    while (iterator < 1) {
+        Vector pos(2,0,0);//-0.5+iterator,0.5);    //position (2,x,y)
         Vector rot(1,0);                    //rotation (1,theta)
         double mass = 5;                    //mass (kg)
         Color fill(1.,0.,0.);               //fillcolor
@@ -40,13 +40,15 @@ int Kernel::start() {
         Vector velocity(2,0,(iterator-0.5)*2 / 1000);
         Vector accel(2,0,-.000005);
         Vector jerk(2,0,0);
+        double halfLine = 0.1;
         //vector<Vector> edge;
         //vector<Vector> vert;
 
         //Rectangle* rect = new Rectangle(pos, rot, mass, fill, stroke, velocity, accel, jerk, dim);
-        Circle* circle = new Circle(pos, rot, mass, fill, stroke, velocity, accel, jerk, 0.25);
+        //Circle* circle = new Circle(pos, rot, mass, fill, stroke, velocity, accel, jerk, 0.25);
+        Capsule* capsule = new Capsule(pos, rot, mass, fill, stroke, velocity, accel, jerk, halfLine, 0.1);
 
-        shapes.push_back(circle);
+        shapes.push_back(capsule);
         
         iterator += 1;
     }

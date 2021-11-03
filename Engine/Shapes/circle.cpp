@@ -27,10 +27,59 @@ void Circle::draw2D() {
     glEnd();
 }
 
+/**
+ * Update circle position, velocity, acceleration, and jerk, as well as other physical properties related to angular momentum
+ * 
+ */
 void Circle::update(double dT) {
     
 }
 
-bool Circle::collideWith(Shape shape) {
+/**
+ * Checks for collisions with polygons using Separating Axis Theorem
+ * @param shape shape to check the collision with
+ * @return object describing the collision (or lack thereof)
+ */
+Collision Circle::collideWith(Shape shape) {
+
+}
+
+/**
+ * Overload of generic shape collision, specifically for circles
+ * @param circle circle to check the collision with
+ * @return object describing the collision (or lack thereof)
+ */
+Collision Circle::collideWith(Circle circle) {
+    bool collide;
+    Vector normal;
+    double penetration;
+    vector<Vector> touching;
+
+    // check collision
+    Vector temp = Vector::subtract(com, circle.com);
+    collide = temp.mag() - r - circle.r <= 0;
+
+    if (!collide) {
+        return Collision(false);
+    }
+
+    // calculate normal
+    normal = Vector::norm(Vector::subtract(com, circle.com));
+
+    // calculate penetration distance
+    penetration = abs(temp.mag() - r - circle.r);
+
+    // calculate contact manifold
+    touching.push_back(Vector::add(com,Vector::multScalar(normal, r-penetration/2)));
+
+    // handle degenerate cases
+    if (temp.mag() == 0) {
+        // if centers coincide, set normal of collision to the up direction
+        // probably would only happen if an object spawns directly on top of another one anyways
+        normal = Vector::multScalar(com, 0);
+        normal.setAt(1,1);
+        
+        touching.clear();
+    }
 
 }

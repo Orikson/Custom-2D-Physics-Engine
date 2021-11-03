@@ -6,7 +6,7 @@
 
 class Circle: public Shape {
     public:
-        Circle(Vector &position, Vector &rotation, double mass, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &accel, Vector &jerk, double radius);//, vector<Vector> &edge, vector<Vector> &vert);
+        Circle(Vector &position, Vector &rotation, double mass, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &accel, Vector &jerk, double radius);
         Circle();
         ~Circle();
         
@@ -16,9 +16,12 @@ class Circle: public Shape {
         /* overrided functions from Shape */
         void draw2D() override;
         void update(double dT) override;
-        bool collideWith(Shape shape) override;
+        Collision collideWith(Shape shape) override;
 
-        // dimension of rectangle
+        Collision collideWith(Circle circle);
+        //Collision collideWith(Capsule capsule);
+
+        // radius
         double r;
 };
 

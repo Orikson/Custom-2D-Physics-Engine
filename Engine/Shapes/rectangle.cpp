@@ -171,8 +171,17 @@ void Rectangle::updateVertices() {
 /**
  * Check for a collision using separating axis theorem on a polygonic shape
  * @param shape object of Shape with similar polygonic structure to Rectangle, to check collision with
- * @return a boolean indicating whether or not a collision has occured
+ * @return object describing the collision (or lack thereof)
  */
-bool Rectangle::collideWith(Shape shape) {
-    return false;
+Collision Rectangle::collideWith(Shape shape) {
+    
+}
+
+/**
+ * Overload of generic shape collision, specifically for circles
+ * @param circle circle to check the collision with
+ * @return object describing the collision (or lack thereof)
+ */
+Collision Rectangle::collideWith(Circle circle) {
+
 }

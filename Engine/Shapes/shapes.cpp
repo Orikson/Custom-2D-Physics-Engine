@@ -63,4 +63,4 @@ void Shape::update(double dT) {}
  * @param shape a parameter to make the compiler happy
  * @return false to make the compiler happy
  */
-bool Shape::collideWith(Shape shape) { return false; }
+Collision Shape::collideWith(Shape shape) { }
