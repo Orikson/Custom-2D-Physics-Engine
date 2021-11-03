@@ -86,6 +86,14 @@ class Vector {
         void mMultScalar(double scalar);
 
 
+        /* -- non mutator vector functions -- */
+        // project current vector object onto given vector
+        Vector nmProj(Vector vector);
+
+        // reject curent vector object from given vector
+        Vector nmRej(Vector vector);
+
+
         /* -- static vector functions -- */
         // normalize vector
         static Vector norm(Vector vector);
@@ -110,6 +118,12 @@ class Vector {
 
         // multiply by scalar; Bi = Ai * S
         static Vector multScalar(Vector vector, double scalar);
+
+        // projection of vector A on vector B
+        static Vector proj(Vector vector1, Vector vector2);
+
+        // rejection of vector A on vector B
+        static Vector rej(Vector vector1, Vector vector2);
 
         // used to store contents of the vector
         vector<double> *vectorContents;

@@ -177,6 +177,14 @@ void Vector::mAddScalar(double scalar) {}
 // multiplies each component of the vector by a scalar in the form Ai = Ai * S
 void Vector::mMultScalar(double scalar) {}
 
+
+// projects the current vector object onto the given vector
+
+
+// rejects the current vector object from the given vector
+
+
+
 // normalizes the given vector, and returns a new one
 Vector Vector::norm(Vector vector) {}
 
@@ -184,27 +192,66 @@ Vector Vector::norm(Vector vector) {}
 Vector Vector::neg(Vector vector) {}
 
 // adds the two vectors of equivalent dimension together, and returns a new vector, in the form Ci = Ai + Bi
-Vector Vector::add(Vector vector1, Vector vector2) {}
+Vector Vector::add(Vector vector1, Vector vector2) {
+    if (vector1.getSize() != vector2.getSize()) { runtime_error("Vectors not same size for vector addition"); }
+    Vector nVector = Vector();
+    for (int i = 0; i < vector1.vectorContents->size(); i ++) {
+        nVector.addvals(vector1.getAt(i) + vector2.getAt(i));
+    }
+    return nVector;
+}
 
 // subtracts the two vectors of equivalent dimension together, and returns a new vector, in the form Ci = Ai - Bi
-Vector Vector::subtract(Vector vector1, Vector vector2) {}
+Vector Vector::subtract(Vector vector1, Vector vector2) {
+    if (vector1.getSize() != vector2.getSize()) { runtime_error("Vectors not same size for vector subtraction"); }
+    Vector nVector = Vector();
+    for (int i = 0; i < vector1.vectorContents->size(); i ++) {
+        nVector.addvals(vector1.getAt(i) - vector2.getAt(i));
+    }
+    return nVector;
+}
 
 // multiplies each component of each vector together, and returns a new vector, in the form Ci = Ai * Bi
-Vector Vector::pointwiseProduct(Vector vector1, Vector vector2) {}
+Vector Vector::pointwiseProduct(Vector vector1, Vector vector2) {
+    if (vector1.getSize() != vector2.getSize()) { runtime_error("Vectors not same size for vector pointwise product"); }
+    Vector nVector = Vector();
+    for (int i = 0; i < vector1.vectorContents->size(); i ++) {
+        nVector.addvals(vector1.getAt(i) * vector2.getAt(i));
+    }
+    return nVector;
+}
 
 // divides each component of the second vector from the first, and returns a new vector, in the form Ci = Ai / Bi
-Vector Vector::pointwiseDivision(Vector vector1, Vector vector2) {}
+Vector Vector::pointwiseDivision(Vector vector1, Vector vector2) {
+    if (vector1.getSize() != vector2.getSize()) { runtime_error("Vectors not same size for vector pointwise division"); }
+    Vector nVector = Vector();
+    for (int i = 0; i < vector1.vectorContents->size(); i ++) {
+        if (vector2.getAt(i) == 0) { runtime_error("Vector divisor contains 0"); }
+        nVector.addvals(vector1.getAt(i) / vector2.getAt(i));
+    }
+    return nVector;
+}
 
 // adds a scalar to each component of the given vector, and returns a new one, in the form Bi = Ai + S
 Vector Vector::addScalar(Vector vector, double scalar) {}
 
 // multiplies a scalar to each component of the given vector, and returns a new one, in the form Bi = Ai * S
 Vector Vector::multScalar(Vector vector, double scalar) {
-    scalar = scalar;
     Vector nVector = Vector();
     for (int i = 0; i < vector.vectorContents->size(); i ++) {
-        cout << "\n" << vector.getAt(i) * scalar;
         nVector.addvals(vector.getAt(i) * scalar);
     }
     return nVector;
+}
+
+// projects the first given vector onto the second given vector
+Vector Vector::proj(Vector vector1, Vector vector2) {
+    double temp = Vector::dot(vector1, vector2) / pow(vector2.getMag(), 2);
+    return Vector::multScalar(vector2, temp);
+}
+
+// rejects the first given vector from the second given vector (orthonormal component of the vector projection)
+Vector Vector::rej(Vector vector1, Vector vector2) {
+    Vector temp = Vector::proj(vector1, vector2);
+    return Vector::subtract(vector1, temp);
 }

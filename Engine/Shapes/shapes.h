@@ -20,8 +20,7 @@ class Shape {
 
         // checks for a collision with another object
         virtual Collision collideWith(Shape shape);
-
-    protected:
+        
         // center of mass of shape (determined by the object)
         Vector com;
 
@@ -43,6 +42,7 @@ class Shape {
         // dimension order
         int size;
 
+    protected:
         // fill color of object
         Color fillColor3f;
 

@@ -28,9 +28,6 @@ class Rectangle: public Shape {
         void update(double dT) override;
         Collision collideWith(Shape shape) override;
 
-        Collision collideWith(Circle circle);
-        Collision collideWith(Capsule capsule);
-
         
         // array containing vectors indicating the direction of edges originating from the vertex of the same index
         vector<Vector> edges;

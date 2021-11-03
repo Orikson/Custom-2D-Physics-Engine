@@ -21,9 +21,6 @@ class Capsule: public Shape {
         void draw2D() override;
         void update(double dT) override;
         Collision collideWith(Shape shape) override;
-        
-        Collision collideWith(Circle circle);
-        //Collision collideWith(Capsule capsule);
 
         // radius
         double r;

@@ -1,4 +1,4 @@
-/* Circle (sphere prism, etc.) class */
+/* Circle (sphere, etc.) class */
 #ifndef _CIRCLE_H
 #define _CIRCLE_H
 
@@ -17,9 +17,6 @@ class Circle: public Shape {
         void draw2D() override;
         void update(double dT) override;
         Collision collideWith(Shape shape) override;
-
-        Collision collideWith(Circle circle);
-        //Collision collideWith(Capsule capsule);
 
         // radius
         double r;
