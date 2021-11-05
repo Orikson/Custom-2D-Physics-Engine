@@ -21,8 +21,16 @@ Collision::Collision(bool collision) {
 }
 
 /**
- * Default colllision constructor
+ * Default collision constructor
  */
 Collision::Collision() {
     
+}
+
+/**
+ * Negate the collision (flip the normal), used for representing the collision for functions that I was too lazy to write.
+ * @return Collision object with inverted normal
+ */
+Collision Collision::neg() {
+    return Collision(collide, dir.ntimes(-1), pen, touched);
 }

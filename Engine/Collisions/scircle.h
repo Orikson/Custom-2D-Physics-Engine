@@ -12,6 +12,7 @@ class SCircle: public Circle {
         
         Collision collideWith(Circle circle);
         Collision collideWith(Capsule capsule);
+        Collision collideWith(Rectangle rectangle);
 };
 
 #include "scircle.cpp"

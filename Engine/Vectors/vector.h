@@ -88,10 +88,22 @@ class Vector {
 
         /* -- non mutator vector functions -- */
         // project current vector object onto given vector
-        Vector nmProj(Vector vector);
+        Vector nproj(Vector vector);
 
         // reject curent vector object from given vector
-        Vector nmRej(Vector vector);
+        Vector nrej(Vector vector);
+
+        // add given vector to current vector
+        Vector nadd(Vector vector);
+
+        // subtract given vector from current vector
+        Vector nminus(Vector vector);
+
+        // add scalar to vector
+        Vector nplus(double scalar);
+
+        // multiply scalar to vector
+        Vector ntimes(double scalar);
 
 
         /* -- static vector functions -- */

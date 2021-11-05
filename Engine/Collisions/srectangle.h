@@ -12,6 +12,7 @@ class SRectangle: public Rectangle {
         
         Collision collideWith(Circle circle);
         Collision collideWith(Capsule capsule);
+        Collision collideWith(Rectangle rectangle);
 };
 
 #include "srectangle.cpp"

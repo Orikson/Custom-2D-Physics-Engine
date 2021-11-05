@@ -2,7 +2,7 @@
  * Capsule constructor that initializes relevant properties of the n-dimensional capsule (a line segment with a radius).
  * @param position position of the n-dimensional capsule, effectively the location of the center of mass
  * @param rotation rotation of the n-dimensional capsule
- * @param massOf mass of the n-dimensional spheroid
+ * @param massOf mass of the n-dimensional capsule
  * @param fillColor 3D vector representing the fill color of the shape
  * @param strokeColor 3D vector representing the stroke color of the shape (applicable only in 2D drawing)
  * @param halfLine magnitude from center of mass of half the line defining the capsule
@@ -13,6 +13,13 @@ Capsule::Capsule(Vector &position, Vector &rotation, double massOf, Color &fillC
     dim.push_back(halfLine);
     dim.push_back(r);
     grayIterate(com.getSize(), vertex);
+}
+
+/**
+ * Capsule destructor
+ */
+Capsule::~Capsule() {
+    
 }
 
 /**
@@ -65,6 +72,38 @@ void Capsule::vertex(vector<int> &iv) {
     );
     
     verticies.push_back(nnVertex);
+}
+
+/**
+ * Find the shortest distance from the line defining the capsule to the given point
+ * @param point the n-dimensional point to find the shortest distance to
+ * @return tuple where the first element is the distance, and the second is the vector direction whose magnitude is reflected in the first element
+ */
+tuple<double,Vector> Capsule::distanceTo(Vector point) {
+    if (point.getSize() != com.getSize()) { runtime_error("Vector dimension mismatch in Capsule::distanceTo"); }
+    
+    // hard coded for 2D
+    Vector v = point.nminus(com);
+    Vector up = Vector(2, halfLine*cos(rot.getAt(0)), halfLine*sin(rot.getAt(0)));
+    if (abs(v.nproj(up).mag()) < up.mag()) {
+        double d = v.nminus(v.nproj(up)).mag();
+        Vector res = point.nminus(v.nminus(v.nproj(up)));
+        tuple<double,Vector> temp (d, Vector(2, res.getAt(0), res.getAt(1)));
+        return temp;
+    }
+
+    // v1 represents the first vertex of the line
+    Vector v1 = com.nadd(up);
+
+    // v2 represents the second vertex of the line
+    Vector v2 = com.nminus(up);
+
+    if (point.nminus(v1).mag() < point.nminus(v2).mag()) {
+        tuple<double,Vector> temp (point.nminus(v1).mag(), v1);
+        return temp;
+    }
+    tuple<double,Vector> temp (point.nminus(v2).mag(), v2);
+    return temp;
 }
 
 

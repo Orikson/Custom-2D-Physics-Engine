@@ -46,7 +46,7 @@ int Kernel::start() {
 
         //Rectangle* rect = new Rectangle(pos, rot, mass, fill, stroke, velocity, accel, jerk, dim);
         //Circle* circle = new Circle(pos, rot, mass, fill, stroke, velocity, accel, jerk, 0.25);
-        Capsule* capsule = new Capsule(pos, rot, mass, fill, stroke, velocity, accel, jerk, halfLine, 0.1);
+        Capsule* capsule = new SCapsule(pos, rot, mass, fill, stroke, velocity, accel, jerk, halfLine, 0.1);
 
         shapes.push_back(capsule);
         

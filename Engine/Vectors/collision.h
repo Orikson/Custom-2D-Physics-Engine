@@ -9,6 +9,8 @@ class Collision {
         Collision(bool collision);
         Collision();
 
+        Collision neg();
+
         bool collide;
         
         Vector dir;

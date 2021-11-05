@@ -38,7 +38,7 @@ Collision SCircle::collideWith(Circle circle) {
     penetration = abs(temp.mag() - r - circle.r);
 
     // calculate contact manifold
-    touching.push_back(Vector::add(com,Vector::multScalar(normal, r-penetration/2)));
+    touching.push_back(com.nadd(normal.nplus(r-penetration/2)));
 
     // handle degenerate cases
     if (temp.mag() == 0) {
@@ -49,6 +49,8 @@ Collision SCircle::collideWith(Circle circle) {
         
         touching.clear();
     }
+
+    return Collision(true, normal, penetration, touching);
 }
 
 /**
@@ -57,5 +59,51 @@ Collision SCircle::collideWith(Circle circle) {
  * @return object describing the collision (or lack thereof)
  */
 Collision SCircle::collideWith(Capsule capsule) {
+    bool collide;
+    Vector normal;
+    double penetration;
+    vector<Vector> touching;
     
+    // check collision
+    // true when distance to closest point on the line <= this.r + capsule.r
+    auto temp = capsule.distanceTo(com);
+    collide = get<0>(temp) <= r + capsule.r;
+
+    if (!collide) {
+        return Collision(false);
+    }
+
+    // calculate normal
+    normal = get<1>(temp).ntimes(1/(get<1>(temp).mag()));
+
+    // calculate penetration distance
+    penetration = abs(get<1>(temp).mag() - r - capsule.r);
+
+    // calculate contact manifold
+    touching.push_back(com.nadd(normal.nplus(r-penetration/2)));
+
+    // handle degenerate cases
+    if (get<0>(temp) == 0) {
+        // if distance from center to the defining line of the capsule is 0, then set the normal to a vector perpendicular to 
+        
+        // hardcoded for 2d
+        double theta = capsule.rot.getAt(0);
+        normal = Vector(2, sin(theta), -cos(theta));
+    }
+
+    return Collision(true, normal, penetration, touching);
+}
+
+/**
+ * Overload of generic shape collision, specifically for rectangles
+ * @param rectangle rectangle to check the collision with
+ * @return object describing the collision (or lack thereof)
+ */
+Collision SCircle::collideWith(Rectangle rectangle) {
+    bool collide;
+    Vector normal;
+    double penetration;
+    vector<Vector> touching;
+
+
 }

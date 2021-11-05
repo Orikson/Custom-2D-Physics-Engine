@@ -17,6 +17,8 @@ class Capsule: public Shape {
 
         void vertex(vector<int> &iv);
 
+        tuple<double,Vector> distanceTo(Vector point);
+
         /* overrided functions from Shape */
         void draw2D() override;
         void update(double dT) override;

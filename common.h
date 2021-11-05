@@ -15,6 +15,7 @@
 #include <math.h>
 #include <sstream>
 #include <time.h>
+#include <tuple>
 #include <limits>
 #include <iomanip>
 extern "C" {

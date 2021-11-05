@@ -178,10 +178,54 @@ void Vector::mAddScalar(double scalar) {}
 void Vector::mMultScalar(double scalar) {}
 
 
-// projects the current vector object onto the given vector
+// projects the current vector onto the given vector
+Vector Vector::nproj(Vector vector) {
+    if (vector.getSize() != vectorContents->size()) { runtime_error("Vector dimension mismatch at non mutable vector subtraction Vector::nminus"); }
+    double temp = Vector::dot(*this, vector) / pow(vector.getMag(), 2);
+    return Vector::multScalar(vector, temp);
+}
+
+// rejects the current vector from the given vector
 
 
-// rejects the current vector object from the given vector
+// adds the current vector to the given vector
+Vector Vector::nadd(Vector vector) {
+    if (vector.getSize() != vectorContents->size()) { runtime_error("Vector dimension mismatch at non mutable vector subtraction Vector::nminus"); }
+    Vector nVector = Vector();
+    for (int i = 0; i < vector.vectorContents->size(); i ++) {
+        nVector.addvals(vectorContents->at(i) + vector.getAt(i));
+    }
+    return nVector;
+}
+
+// subtracts the current vector from the given vector
+Vector Vector::nminus(Vector vector) {
+    if (vector.getSize() != vectorContents->size()) { runtime_error("Vector dimension mismatch at non mutable vector subtraction Vector::nminus"); }
+    Vector nVector = Vector();
+    for (int i = 0; i < vector.vectorContents->size(); i ++) {
+        nVector.addvals(vectorContents->at(i) - vector.getAt(i));
+    }
+    return nVector;
+}
+
+ // add scalar to vector
+Vector Vector::nplus(double scalar) {
+    Vector nVector = Vector();
+    for (int i = 0; i < vectorContents->size(); i ++) {
+        nVector.addvals(vectorContents->at(i) + scalar);
+    }
+    return nVector;
+}
+
+// multiply scalar to vector
+Vector Vector::ntimes(double scalar) {
+    Vector nVector = Vector();
+    for (int i = 0; i < vectorContents->size(); i ++) {
+        nVector.addvals(vectorContents->at(i) * scalar);
+    }
+    return nVector;
+}
+
 
 
 
