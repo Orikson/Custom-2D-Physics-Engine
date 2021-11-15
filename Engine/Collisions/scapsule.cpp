@@ -8,8 +8,8 @@
  * @param halfLine magnitude from center of mass of half the line defining the capsule
  * @param radius radius of the n-dimensional capsule
  */
-SCapsule::SCapsule(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &accel, Vector &jerk, double halfLine, double radius) :
-    Capsule(position, rotation, massOf, fillColor, strokeColor, velocity, accel, jerk, halfLine, radius) {
+SCapsule::SCapsule(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double halfLine, double radius) :
+    Capsule(position, rotation, massOf, fillColor, strokeColor, velocity, halfLine, radius) {
     
 }
 
@@ -34,7 +34,12 @@ Collision SCapsule::collideWith(SCircle circle) {
  * @return object describing the collision (or lack thereof)
  */
 Collision SCapsule::collideWith(Capsule capsule) {
+    bool collide;
+    Vector normal;
+    double penetration;
+    vector<Vector> touching;
 
+    
 }
 
 /**
@@ -44,4 +49,9 @@ Collision SCapsule::collideWith(Capsule capsule) {
  */
 Collision SCapsule::collideWith(Rectangle rectangle) {
 
+}
+
+
+Collision SCapsule::collideWithFloor() {
+    
 }

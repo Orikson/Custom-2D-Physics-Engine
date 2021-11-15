@@ -138,15 +138,13 @@ class Vector {
         static Vector rej(Vector vector1, Vector vector2);
 
         // used to store contents of the vector
-        vector<double> *vectorContents;
-
-    protected:
+        vector<double> vectorContents;
 
         // size of vector
-        int *vectorSize;
+        int vectorSize;
 
         // magnitude of vector
-        double *magnitude;
+        double magnitude;
 
 
         

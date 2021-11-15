@@ -64,8 +64,8 @@ void Rectangle::grayIterate(int depth, void (Rectangle::*f)(vector<int> &)) {
  * @param strokeColor 3D vector representing the stroke color of the shape (applicable only in 2D drawing)
  * @param dimensions dimensions of the n-dimensional rectoid
  */
-Rectangle::Rectangle(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &accel, Vector &jerk, Vector &dimensions) : 
-    Shape(position, rotation, massOf, fillColor, strokeColor, velocity, accel, jerk), dim(dimensions) {
+Rectangle::Rectangle(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &dimensions) : 
+    Shape(position, rotation, massOf, fillColor, strokeColor, velocity), dim(dimensions) {
     // 2d has 4 points, 3d has 8, 4d has 16 (2^n points for dimensions n)
     
     vector<Vector*> verticies;
@@ -75,6 +75,23 @@ Rectangle::Rectangle(Vector &position, Vector &rotation, double massOf, Color &f
     edges.reserve(dim.getSize());
 
     grayIterate(dim.getSize(), vertex);
+
+    // Moment of Inertia is constructed from 3 column vectors representing rotation about the X, Y, and Z axes
+    // (1/12)m(d_n^2+d_m^2)
+    // MoI matrix appears visually here as its transpose
+    double cs = com.getSize();
+    double I1 = (1/12)*massOf*(dim.getAt(2)*dim.getAt(2)+dim.getAt(1)*dim.getAt(1));
+    double I2 = (1/12)*massOf*(dim.getAt(1)*dim.getAt(1)+dim.getAt(0)*dim.getAt(0));
+    double I3 = (1/12)*massOf*(dim.getAt(0)*dim.getAt(0)+dim.getAt(2)*dim.getAt(2));
+
+    if (cs == 3) { // 3D matrix
+        MoI.push_back(Vector(3, I1, 0, 0));
+        MoI.push_back(Vector(3, 0, I2, 0));
+        MoI.push_back(Vector(3, 0, 0, I3));
+    } else if (cs == 2) { // 2D MoI ((1/12)m(a^2+b^2))
+        MoI.push_back(Vector(1, I2));
+        invMoI.push_back(Vector(1, 1.0 / I2));
+    }
 }
 
 /**
@@ -150,9 +167,9 @@ void Rectangle::update(double dT) {
     com.mAdd(vel);
     //if (com.vectorContents->at(1) < -0.5) { vel.vectorContents->at(1) *= -1; }
     // collision with floor
-    if (com.vectorContents->at(1) - dim.vectorContents->at(1) / 2 < -1.0) {
-        com.vectorContents->at(1) = -1. + dim.vectorContents->at(1);
-        vel.vectorContents->at(1) *= -0.95;
+    if (com.vectorContents.at(1) - dim.vectorContents.at(1) / 2 < -1.0) {
+        com.vectorContents.at(1) = -1. + dim.vectorContents.at(1);
+        vel.vectorContents.at(1) *= -0.95;
     }
 
     updateVertices();
@@ -174,5 +191,9 @@ void Rectangle::updateVertices() {
  * @return object describing the collision (or lack thereof)
  */
 Collision Rectangle::collideWith(Shape shape) {
+    
+}
+
+Collision Rectangle::collideWithFloor() {
     
 }

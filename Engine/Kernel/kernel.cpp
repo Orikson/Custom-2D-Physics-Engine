@@ -31,24 +31,22 @@ int Kernel::start() {
     
     int iterator = 0;
     while (iterator < 1) {
-        Vector pos(2,0,0);//-0.5+iterator,0.5);    //position (2,x,y)
-        Vector rot(1,0);                    //rotation (1,theta)
-        double mass = 5;                    //mass (kg)
-        Color fill(1.,0.,0.);               //fillcolor
-        Color stroke(1.,0.,0.);             //strokecolor
-        Vector dim(2,0.25,0.25);            //dimensions (2,w,h)
-        Vector velocity(2,0,(iterator-0.5)*2 / 1000);
-        Vector accel(2,0,-.000005);
-        Vector jerk(2,0,0);
+        Vector pos(2,0,0);          //position (2,x,y)
+        Vector rot(1,0);            //rotation (1,theta)
+        double mass = 5;            //mass (kg)
+        Color fill(1.,0.,0.);       //fillcolor
+        Color stroke(1.,0.,0.);     //strokecolor
+        Vector dim(2,0.25,0.25);    //dimensions (2,w,h)
+        Vector velocity(2,0,0);
         double halfLine = 0.1;
         //vector<Vector> edge;
         //vector<Vector> vert;
 
-        //Rectangle* rect = new Rectangle(pos, rot, mass, fill, stroke, velocity, accel, jerk, dim);
-        //Circle* circle = new Circle(pos, rot, mass, fill, stroke, velocity, accel, jerk, 0.25);
-        Capsule* capsule = new SCapsule(pos, rot, mass, fill, stroke, velocity, accel, jerk, halfLine, 0.1);
+        //Rectangle* rect = new SRectangle(pos, rot, mass, fill, stroke, velocity, dim);
+        SCircle* circle = new SCircle(pos, rot, mass, fill, stroke, velocity, 0.1);
+        //Capsule* capsule = new SCapsule(pos, rot, mass, fill, stroke, velocity, halfLine, 0.1);
 
-        shapes.push_back(capsule);
+        shapes.push_back(circle);
         
         iterator += 1;
     }
@@ -137,7 +135,8 @@ void Kernel::update(int iFrame, double iTime, double dT, vector<Shape*>* shapes)
     cout << "\rFrame: " << iFrame << "\tTime Passed (sec): " << iTime << "\tdT: " << std::fixed << std::setprecision(5) << dT << "\tFPS: " << std::fixed << std::setprecision(5) << 1 / dT << "                 ";
 
     for (int i = 0; i < shapes->size(); i ++) {
-        shapes->at(i)->update(dT);
+        //shapes->at(i)->update(dT);
+        shapes->at(i)->smartUpdate(dT);
     }
 }
 

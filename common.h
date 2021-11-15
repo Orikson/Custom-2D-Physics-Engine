@@ -3,6 +3,8 @@
 
 /*=======USEFUL MATH CONSTANTS=======*/
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816
+#define G -9.8
+#define DAMPING 0.98
 
 
 /*=======STANDARD TEMPLATE LIBRARY=======*/
@@ -23,10 +25,8 @@ extern "C" {
 }
 
 using namespace std;
-namespace patch
-{
-    template <typename T> string to_string( const T& n )
-    {
+namespace patch {
+    template <typename T> string to_string(const T& n) {
         ostringstream stm ;
         stm << n ;
         return stm.str() ;

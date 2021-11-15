@@ -7,8 +7,8 @@
  * @param strokeColor 3D vector representing the stroke color of the shape (applicable only in 2D drawing)
  * @param radius radius of the n-dimensional spheroid
  */
-SCircle::SCircle(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &accel, Vector &jerk, double radius) :
-    Circle(position, rotation, massOf, fillColor, strokeColor, velocity, accel, jerk, radius) {
+SCircle::SCircle(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double radius) :
+    Circle(position, rotation, massOf, fillColor, strokeColor, velocity, radius) {
     
 }
 
@@ -106,4 +106,30 @@ Collision SCircle::collideWith(Rectangle rectangle) {
     vector<Vector> touching;
 
 
+}
+
+/**
+ * Collide with floor
+ * @return object describing the collision (or lack thereof)
+ */
+Collision SCircle::collideWithFloor() {
+    bool collide;
+    Vector normal;
+    double penetration;
+    vector<Vector> touching;
+
+    if (com.getAt(1) - r < -1) {
+        collide = true;
+    } else {
+        return Collision(false);
+    }
+
+    // hardcoded for 2D
+    normal = Vector(2, 0, 1);
+
+    penetration = abs(com.getAt(1) - r + 1);
+
+    touching.push_back(Vector(2, com.getAt(0), com.getAt(1) - r + 1));
+
+    return Collision(collide, normal, penetration, touching);
 }

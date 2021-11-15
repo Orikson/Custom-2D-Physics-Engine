@@ -10,28 +10,24 @@
  */
 template <typename... Types> Vector::Vector(int size, Types... contents) {
     //init pointers
-    vectorSize = new int;
-    *vectorSize = size;
+    vectorSize = size;
 
-    magnitude = new double;
-    vectorContents = new vector<double>;
-    vectorContents->reserve(*vectorSize);
+    vector<double> vectorContents;
+    vectorContents.reserve(vectorSize);
 
     addvals(contents...);
-    *magnitude = mag();
+    magnitude = mag();
 }
 
 // Default constructor
 Vector::Vector() {
-    vectorSize = new int;
-    *vectorSize = 1;
+    vectorSize = 1;
 
-    magnitude = new double;
-    vectorContents = new vector<double>;
-    vectorContents->reserve(*vectorSize);
+    vector<double> vectorContents;
+    vectorContents.reserve(vectorSize);
 
-    *magnitude = 0;
-    vectorContents->push_back(0);
+    magnitude = 0;
+    vectorContents.push_back(0);
 }
 
 /**
@@ -39,26 +35,24 @@ Vector::Vector() {
  * @param vector a vector to make a copy of
  */
 Vector::Vector(const Vector &vectorDef) {
-    vectorSize = new int;
-    *vectorSize = *vectorDef.vectorSize;
+    vectorSize = vectorDef.vectorSize;
     
-    magnitude = new double;
-    vectorContents = new vector<double>;
-    vectorContents->reserve(*vectorSize);
+    vector<double> vectorContents;
+    vectorContents.reserve(vectorSize);
 
-    for (double n : *vectorDef.vectorContents) {
+    for (double n : vectorDef.vectorContents) {
         addvals(n);
     }
-    *magnitude = *vectorDef.magnitude;
+    magnitude = vectorDef.magnitude;
 }
 
 /**
  * Vector destructor
  */
 Vector::~Vector() {
-    delete vectorContents;
-    delete vectorSize;
-    delete magnitude;
+    //delete vectorContents;
+    //delete vectorSize;
+    //delete magnitude;
 }
 
 /* Vector class functions */
@@ -71,7 +65,7 @@ Vector::~Vector() {
  */
 template <typename Type, typename... Types> void Vector::addvals(Type item, Types... contents) {
     try {
-        vectorContents->push_back((double)item);
+        vectorContents.push_back((double)item);
         addvals(contents...);
     } catch(...) {
         throw runtime_error("item not of type int, double, or float");
@@ -79,7 +73,7 @@ template <typename Type, typename... Types> void Vector::addvals(Type item, Type
 }
 // placeholder to terminate variadic function recursively
 void Vector::addvals() {
-    *vectorSize = (int)vectorContents->size(); 
+    vectorSize = (int)vectorContents.size(); 
 }
 
 
@@ -87,17 +81,17 @@ void Vector::addvals() {
 
 // gets non-mutable vector value at given index
 double Vector::getAt(int index) {
-    return vectorContents->at(index);
+    return vectorContents.at(index);
 }
 
 // gets size of vector
 int Vector::getSize() {
-    return *vectorSize;
+    return vectorSize;
 }
 
 // gets magnitude of vector
 double Vector::getMag() {
-    return *magnitude;
+    return magnitude;
 }
 
 
@@ -105,7 +99,7 @@ double Vector::getMag() {
 
 // sets vector value at given index
 void Vector::setAt(int index, double val) {
-    vectorContents->at(index) = val;
+    vectorContents.at(index) = val;
 }
 
 
@@ -114,7 +108,7 @@ void Vector::setAt(int index, double val) {
 // returns magnitude of vector
 double Vector::mag() {
     double mag = 0.0;
-    for (double n : *vectorContents) {
+    for (double n : vectorContents) {
         mag += n*n;
     }
     return sqrt(mag);
@@ -157,8 +151,8 @@ void Vector::mNeg() {}
 
 // adds the vector to the given vector in the form Ai = Ai + Bi
 void Vector::mAdd(Vector vector) {
-    for (int i = 0; i < vectorContents->size(); i ++) {
-        vectorContents->at(i) += vector.vectorContents->at(i);
+    for (int i = 0; i < vectorContents.size(); i ++) {
+        vectorContents.at(i) += vector.vectorContents.at(i);
     }
 }
 
@@ -180,7 +174,7 @@ void Vector::mMultScalar(double scalar) {}
 
 // projects the current vector onto the given vector
 Vector Vector::nproj(Vector vector) {
-    if (vector.getSize() != vectorContents->size()) { runtime_error("Vector dimension mismatch at non mutable vector subtraction Vector::nminus"); }
+    if (vector.getSize() != vectorContents.size()) { runtime_error("Vector dimension mismatch at non mutable vector subtraction Vector::nminus"); }
     double temp = Vector::dot(*this, vector) / pow(vector.getMag(), 2);
     return Vector::multScalar(vector, temp);
 }
@@ -190,20 +184,20 @@ Vector Vector::nproj(Vector vector) {
 
 // adds the current vector to the given vector
 Vector Vector::nadd(Vector vector) {
-    if (vector.getSize() != vectorContents->size()) { runtime_error("Vector dimension mismatch at non mutable vector subtraction Vector::nminus"); }
+    if (vector.getSize() != vectorContents.size()) { runtime_error("Vector dimension mismatch at non mutable vector subtraction Vector::nminus"); }
     Vector nVector = Vector();
-    for (int i = 0; i < vector.vectorContents->size(); i ++) {
-        nVector.addvals(vectorContents->at(i) + vector.getAt(i));
+    for (int i = 0; i < vector.vectorContents.size(); i ++) {
+        nVector.addvals(vectorContents.at(i) + vector.getAt(i));
     }
     return nVector;
 }
 
 // subtracts the current vector from the given vector
 Vector Vector::nminus(Vector vector) {
-    if (vector.getSize() != vectorContents->size()) { runtime_error("Vector dimension mismatch at non mutable vector subtraction Vector::nminus"); }
+    if (vector.getSize() != vectorContents.size()) { runtime_error("Vector dimension mismatch at non mutable vector subtraction Vector::nminus"); }
     Vector nVector = Vector();
-    for (int i = 0; i < vector.vectorContents->size(); i ++) {
-        nVector.addvals(vectorContents->at(i) - vector.getAt(i));
+    for (int i = 0; i < vector.vectorContents.size(); i ++) {
+        nVector.addvals(vectorContents.at(i) - vector.getAt(i));
     }
     return nVector;
 }
@@ -211,8 +205,8 @@ Vector Vector::nminus(Vector vector) {
  // add scalar to vector
 Vector Vector::nplus(double scalar) {
     Vector nVector = Vector();
-    for (int i = 0; i < vectorContents->size(); i ++) {
-        nVector.addvals(vectorContents->at(i) + scalar);
+    for (int i = 0; i < vectorContents.size(); i ++) {
+        nVector.addvals(vectorContents.at(i) + scalar);
     }
     return nVector;
 }
@@ -220,8 +214,8 @@ Vector Vector::nplus(double scalar) {
 // multiply scalar to vector
 Vector Vector::ntimes(double scalar) {
     Vector nVector = Vector();
-    for (int i = 0; i < vectorContents->size(); i ++) {
-        nVector.addvals(vectorContents->at(i) * scalar);
+    for (int i = 0; i < vectorContents.size(); i ++) {
+        nVector.addvals(vectorContents.at(i) * scalar);
     }
     return nVector;
 }
@@ -239,7 +233,7 @@ Vector Vector::neg(Vector vector) {}
 Vector Vector::add(Vector vector1, Vector vector2) {
     if (vector1.getSize() != vector2.getSize()) { runtime_error("Vectors not same size for vector addition"); }
     Vector nVector = Vector();
-    for (int i = 0; i < vector1.vectorContents->size(); i ++) {
+    for (int i = 0; i < vector1.vectorContents.size(); i ++) {
         nVector.addvals(vector1.getAt(i) + vector2.getAt(i));
     }
     return nVector;
@@ -249,7 +243,7 @@ Vector Vector::add(Vector vector1, Vector vector2) {
 Vector Vector::subtract(Vector vector1, Vector vector2) {
     if (vector1.getSize() != vector2.getSize()) { runtime_error("Vectors not same size for vector subtraction"); }
     Vector nVector = Vector();
-    for (int i = 0; i < vector1.vectorContents->size(); i ++) {
+    for (int i = 0; i < vector1.vectorContents.size(); i ++) {
         nVector.addvals(vector1.getAt(i) - vector2.getAt(i));
     }
     return nVector;
@@ -259,7 +253,7 @@ Vector Vector::subtract(Vector vector1, Vector vector2) {
 Vector Vector::pointwiseProduct(Vector vector1, Vector vector2) {
     if (vector1.getSize() != vector2.getSize()) { runtime_error("Vectors not same size for vector pointwise product"); }
     Vector nVector = Vector();
-    for (int i = 0; i < vector1.vectorContents->size(); i ++) {
+    for (int i = 0; i < vector1.vectorContents.size(); i ++) {
         nVector.addvals(vector1.getAt(i) * vector2.getAt(i));
     }
     return nVector;
@@ -269,7 +263,7 @@ Vector Vector::pointwiseProduct(Vector vector1, Vector vector2) {
 Vector Vector::pointwiseDivision(Vector vector1, Vector vector2) {
     if (vector1.getSize() != vector2.getSize()) { runtime_error("Vectors not same size for vector pointwise division"); }
     Vector nVector = Vector();
-    for (int i = 0; i < vector1.vectorContents->size(); i ++) {
+    for (int i = 0; i < vector1.vectorContents.size(); i ++) {
         if (vector2.getAt(i) == 0) { runtime_error("Vector divisor contains 0"); }
         nVector.addvals(vector1.getAt(i) / vector2.getAt(i));
     }
@@ -282,7 +276,7 @@ Vector Vector::addScalar(Vector vector, double scalar) {}
 // multiplies a scalar to each component of the given vector, and returns a new one, in the form Bi = Ai * S
 Vector Vector::multScalar(Vector vector, double scalar) {
     Vector nVector = Vector();
-    for (int i = 0; i < vector.vectorContents->size(); i ++) {
+    for (int i = 0; i < vector.vectorContents.size(); i ++) {
         nVector.addvals(vector.getAt(i) * scalar);
     }
     return nVector;

@@ -24,3 +24,8 @@ Collision SRectangle::collideWith(Capsule capsule) {
 Collision SRectangle::collideWith(Rectangle rectangle) {
 
 }
+
+
+Collision SRectangle::collideWithFloor() {
+    
+}

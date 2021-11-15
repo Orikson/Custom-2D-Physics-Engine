@@ -8,8 +8,8 @@
  * @param halfLine magnitude from center of mass of half the line defining the capsule
  * @param radius radius of the n-dimensional capsule
  */
-Capsule::Capsule(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &accel, Vector &jerk, double halfLine, double radius) : 
-    Shape(position, rotation, massOf, fillColor, strokeColor, velocity, accel, jerk), r(radius), halfLine(halfLine) {
+Capsule::Capsule(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double halfLine, double radius) : 
+    Shape(position, rotation, massOf, fillColor, strokeColor, velocity), r(radius), halfLine(halfLine) {
     dim.push_back(halfLine);
     dim.push_back(r);
     grayIterate(com.getSize(), vertex);
@@ -106,6 +106,18 @@ tuple<double,Vector> Capsule::distanceTo(Vector point) {
     return temp;
 }
 
+/*Algorithm from
+    Vladimir J. LUMELSKY,
+        "ON FAST COMPUTATION OF DISTANCE BETWEEN LINE SEGMENTS",
+        Information Processing Letters 21 (1985) 55-61
+*/
+/**
+ * Find the shortest distance from the line defining the capsule to the given line segment
+ * @param point1 the first n-dimensional point defining the given line segment
+ * @param point2 the second n-dimensional point defining the given line segment
+ * @return tuple where the first element is the distance, and the second is the vector direction whose magnitude is reflected in the first element
+ */
+
 
 /**
  * Draw a 2D cross-section of capsule. Must be called within a gl context
@@ -134,12 +146,16 @@ void Capsule::draw2D() {
 }
 
 void Capsule::update(double dT) {
-    rot.vectorContents->at(0) += 0.001;
+    rot.vectorContents.at(0) += 0.001;
 
     verticies.clear();
     grayIterate(com.getSize(), vertex);
 }
 
 Collision Capsule::collideWith(Shape shape) {
+
+}
+
+Collision Capsule::collideWithFloor() {
 
 }

@@ -6,13 +6,15 @@
 
 class SCapsule: public Capsule {
     public:
-        SCapsule(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &accel, Vector &jerk, double halfLine, double radius);
+        SCapsule(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double halfLine, double radius);
         SCapsule();
         ~SCapsule();
         
         Collision collideWith(SCircle circle);
         Collision collideWith(Capsule capsule);
         Collision collideWith(Rectangle rectangle);
+
+        Collision collideWithFloor() override;
 };
 
 #include "scapsule.cpp"
