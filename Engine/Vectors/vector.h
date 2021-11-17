@@ -28,6 +28,8 @@ class Vector {
         template <typename Type, typename... Types> void addvals(Type item, Types... contents);
         void addvals();
 
+        // set contents as given vector's contents
+        void setAs(Vector vector);
 
         // getter functions
         // gets vector value at given index
@@ -58,6 +60,9 @@ class Vector {
 
         // cross product (returns a new Vector object)
         static Vector cross(Vector vector3D1, Vector vector3D2);
+
+        // 2D temp cross (returns double)
+        static double cross2D(Vector vector1, Vector vector2);
 
 
         /* -- mutator vector functions -- */  
@@ -136,6 +141,11 @@ class Vector {
 
         // rejection of vector A on vector B
         static Vector rej(Vector vector1, Vector vector2);
+
+        // rotate this vector by theta degrees (only for 2D)
+        Vector rotate(double theta);
+
+
 
         // used to store contents of the vector
         vector<double> vectorContents;

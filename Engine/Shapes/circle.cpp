@@ -24,6 +24,9 @@ Circle::Circle(Vector &position, Vector &rotation, double massOf, Color &fillCol
         MoI.push_back(Vector(1, (1.0/2.0)*massOf*radius*radius));
         invMoI.push_back(Vector(1, 1.0 / ((1.0/2.0)*massOf*radius*radius)));
     }
+
+    angvel.setAs(Vector(1, 0));
+    angacl.setAs(Vector(1, 0));
 }
 
 /**

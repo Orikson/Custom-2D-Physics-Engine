@@ -28,16 +28,20 @@ int Kernel::start() {
     // Define shapes
     vector<Shape*> shapes;
     shapes.reserve(3);
+
+    // Define constraints
+    vector<Constraint*> constraints;
+    constraints.reserve(3);
     
     int iterator = 0;
-    while (iterator < 1) {
-        Vector pos(2,0,0);          //position (2,x,y)
+    while (iterator < 2) {
+        Vector pos(2,-0.5+iterator,0);          //position (2,x,y)
         Vector rot(1,0);            //rotation (1,theta)
-        double mass = 5;            //mass (kg)
-        Color fill(1.,0.,0.);       //fillcolor
-        Color stroke(1.,0.,0.);     //strokecolor
+        double mass = 1;            //mass (kg)
+        Color fill(0.,0.5,1.);       //fillcolor
+        Color stroke(0.,0.5,1.);     //strokecolor
         Vector dim(2,0.25,0.25);    //dimensions (2,w,h)
-        Vector velocity(2,0,0);
+        Vector velocity(2,0,4*iterator);
         double halfLine = 0.1;
         //vector<Vector> edge;
         //vector<Vector> vert;
@@ -51,6 +55,8 @@ int Kernel::start() {
         iterator += 1;
     }
 
+    constraints.push_back(new DistanceConstraint(*shapes.at(0), *shapes.at(1), Vector(2, 0, 0), Vector(2, -0, -0)));
+
     // Main loop
     bool isRunning = true;
     while (isRunning) {
@@ -63,12 +69,18 @@ int Kernel::start() {
         if (dT < 0.001) { dT = 0.001; }
         iTime = (double)(t2-t1) / CLOCKS_PER_SEC;
 
-
+        // Setup gl environment
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // Background color
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        
         // Update
-        update(iFrame, iTime, dT, &shapes);
+        update(iFrame, iTime, dT, &shapes, &constraints);
 
         // Draw
         render(window, iFrame, iTime, &shapes);
+
+        //cin.ignore();
     }
 
     // Free resources
@@ -128,15 +140,20 @@ SDL_Window* Kernel::createWindow(const char* windowTitle, int width, int height)
  * @param iTime the time since the program has begun running in seconds
  * @param shapes the shapes that the program is going to render and simulate
  */
-void Kernel::update(int iFrame, double iTime, double dT, vector<Shape*>* shapes) {
+void Kernel::update(int iFrame, double iTime, double dT, vector<Shape*>* shapes, vector<Constraint*>* constraints) {
     // User Updates:
     double theta = (double)iFrame/10000;
     
     cout << "\rFrame: " << iFrame << "\tTime Passed (sec): " << iTime << "\tdT: " << std::fixed << std::setprecision(5) << dT << "\tFPS: " << std::fixed << std::setprecision(5) << 1 / dT << "                 ";
 
+    for (int i = 0; i < constraints->size(); i ++) {
+        //cout << "\nConstraint Address: " << constraints->at(i);// << " Shape A Address: " << constraints->at(i)->A << " Shape B Address: " << constraints->at(i)->B;
+        constraints->at(i)->update();
+    }
+
     for (int i = 0; i < shapes->size(); i ++) {
         //shapes->at(i)->update(dT);
-        shapes->at(i)->smartUpdate(dT);
+        shapes->at(i)->smartUpdate(0.001);//dT);
     }
 }
 
@@ -150,11 +167,6 @@ void Kernel::update(int iFrame, double iTime, double dT, vector<Shape*>* shapes)
 void Kernel::render(SDL_Window* window, int iFrame, double iTime, vector<Shape*>* shapes) {
     double theta = (double)iFrame/10000;
     
-    // Setup gl environment
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // Background color
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
     // draw shapes
     for (int i = 0; i < shapes->size(); i ++) {
         shapes->at(i)->draw2D();

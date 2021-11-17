@@ -143,6 +143,20 @@ Vector Vector::cross(Vector vector3D1, Vector vector3D2) {
     }
 }
 
+/** 
+ * returns 2D cross product of two 2D vectors (considers them as 3D vectors with 3D vector component 0). Also the determinant of a matrix constructed using these two vectors
+ * @param vector1 First 2D vector
+ * @param vector2 Second 2D vector
+ * @return Double representing the result
+ */
+double Vector::cross2D(Vector vector1, Vector vector2) {
+    if (vector1.getSize() == 2 && vector2.getSize() == 2) {
+        return vector1.getAt(0) * vector2.getAt(1) - vector1.getAt(1) * vector2.getAt(0);
+    } else {
+        throw runtime_error("vectors are not 3-dimensional");
+    }
+}
+
 // normalizes the vector, and redefines the vector as the normalized version
 void Vector::mNorm() {}
 
@@ -157,7 +171,11 @@ void Vector::mAdd(Vector vector) {
 }
 
 // subtracts the given vector from the vector in the form Ai = Ai - Bi
-void Vector::mSubtract(Vector vector) {}
+void Vector::mSubtract(Vector vector) {
+    for (int i = 0; i < vectorContents.size(); i ++) {
+        vectorContents.at(i) -= vector.vectorContents.at(i);
+    }
+}
 
 // multiplies each component of the given vector with the matching component in the vector in the form Ai = Ai * Bi
 void Vector::mPointwiseProduct(Vector vector) {}
@@ -292,4 +310,27 @@ Vector Vector::proj(Vector vector1, Vector vector2) {
 Vector Vector::rej(Vector vector1, Vector vector2) {
     Vector temp = Vector::proj(vector1, vector2);
     return Vector::subtract(vector1, temp);
+}
+
+/**
+ * Rotate 2D vector by theta degrees
+ * @param theta angle to rotate vector by
+ * @return returns resultant vector
+ */
+Vector Vector::rotate(double theta) {
+    double xC = vectorContents.at(0)*cos(theta)-vectorContents.at(1)*sin(theta);
+    double yC = vectorContents.at(0)*sin(theta)+vectorContents.at(1)*cos(theta);
+    return Vector(2, xC, yC);
+}
+
+/**
+ * Set vector contents as given vector contents
+ * @param vector vector to duplicate
+ */
+void Vector::setAs(Vector vector) {
+    vectorContents.clear();
+    for (int i = 0; i < vector.vectorContents.size(); i ++) {
+        vectorContents.push_back(vector.vectorContents.at(i));
+    }
+    vectorSize = vector.vectorSize;
 }

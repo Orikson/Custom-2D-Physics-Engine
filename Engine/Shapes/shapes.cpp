@@ -14,8 +14,10 @@ Shape::Shape(Vector &position, Vector &rotation, double massOf, Color &fillColor
     int s = com.getSize();
     if (s == 2) {
         sumForces = Vector(2, 0., 0.);
+        sumTorque = Vector(1, 0.);
     } else if (s == 3) {
         sumForces = Vector(3, 0., 0., 0.);
+        sumTorque = Vector(3, 0, 0, 0);
     }
 }
 
@@ -82,12 +84,12 @@ void Shape::naiveUpdate(double dT) {
     
     // integrate angular acceleration and velocity to update rotation vector
     // hardcoded for 2D
-    angvel.mAdd(sumTorque.ntimes(invMoI.at(0).getAt(0)).ntimes(dT));
+    angvel.mAdd(sumTorque.ntimes(invMoI.at(0).getAt(0)*dT));
     // dampen
     angvel.mMultScalar(DAMPING);
     // integrate for angular position
     // look into quaternions to update orientation
-    rot = rot.nadd(angvel.ntimes(dT));
+    rot.mAdd(angvel.ntimes(dT));
     // clear temporary variables
 
 }
