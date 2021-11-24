@@ -6,13 +6,14 @@
 
 class SRectangle: public Rectangle {
     public:
-        SRectangle(Vector &position, Vector &rotation, double mass, Color &fillColor, Color &strokeColor, Vector &velocity, double radius);
+        SRectangle(Vector &position, Vector &rotation, double mass, Color &fillColor, Color &strokeColor, Vector &velocity, double elasticity, Vector &dimensions);
         SRectangle();
         ~SRectangle();
         
-        Collision collideWith(Circle circle);
-        Collision collideWith(Capsule capsule);
-        Collision collideWith(Rectangle rectangle);
+        Collision collideWith(Shape &shape) override;
+        Collision collideWith(Circle &circle) override;
+        Collision collideWith(Capsule &capsule) override;
+        Collision collideWith(Rectangle &rectangle) override;
 
         Collision collideWithFloor() override;
 };

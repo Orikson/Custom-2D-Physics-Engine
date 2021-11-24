@@ -6,7 +6,7 @@
 
 class Capsule: public Shape {
     public:
-        Capsule(Vector &position, Vector &rotation, double mass, Color &fillColor, Color &strokeColor, Vector &velocity, double halfLine, double radius);
+        Capsule(Vector &position, Vector &rotation, double mass, Color &fillColor, Color &strokeColor, Vector &velocity, double elasticity, double halfLine, double radius);
         Capsule();
         ~Capsule();
         
@@ -22,7 +22,7 @@ class Capsule: public Shape {
         /* overrided functions from Shape */
         void draw2D() override;
         void update(double dT) override;
-        Collision collideWith(Shape shape) override;
+        Collision collideWith(Shape &shape) override;
         virtual Collision collideWithFloor() override;
 
         // radius

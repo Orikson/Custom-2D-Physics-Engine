@@ -3,7 +3,7 @@
  * @param circle circle to check the collision with
  * @return object describing the collision (or lack thereof)
  */
-Collision SRectangle::collideWith(Circle circle) {
+Collision SRectangle::collideWith(Circle &circle) {
 
 }
 
@@ -12,7 +12,7 @@ Collision SRectangle::collideWith(Circle circle) {
  * @param capsule capsule to check the collision with
  * @return object describing the collision (or lack thereof)
  */
-Collision SRectangle::collideWith(Capsule capsule) {
+Collision SRectangle::collideWith(Capsule &capsule) {
 
 }
 
@@ -21,7 +21,7 @@ Collision SRectangle::collideWith(Capsule capsule) {
  * @param rectangle rectangle to check the collision with
  * @return object describing the collision (or lack thereof)
  */
-Collision SRectangle::collideWith(Rectangle rectangle) {
+Collision SRectangle::collideWith(Rectangle &rectangle) {
 
 }
 

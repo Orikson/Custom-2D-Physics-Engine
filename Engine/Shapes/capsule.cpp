@@ -8,8 +8,8 @@
  * @param halfLine magnitude from center of mass of half the line defining the capsule
  * @param radius radius of the n-dimensional capsule
  */
-Capsule::Capsule(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double halfLine, double radius) : 
-    Shape(position, rotation, massOf, fillColor, strokeColor, velocity), r(radius), halfLine(halfLine) {
+Capsule::Capsule(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double elasticity, double halfLine, double radius) : 
+    Shape(position, rotation, massOf, fillColor, strokeColor, velocity, elasticity), r(radius), halfLine(halfLine) {
     dim.push_back(halfLine);
     dim.push_back(r);
     grayIterate(com.getSize(), vertex);
@@ -152,7 +152,7 @@ void Capsule::update(double dT) {
     grayIterate(com.getSize(), vertex);
 }
 
-Collision Capsule::collideWith(Shape shape) {
+Collision Capsule::collideWith(Shape &shape) {
 
 }
 

@@ -34,20 +34,21 @@ int Kernel::start() {
     constraints.reserve(3);
     
     int iterator = 0;
-    while (iterator < 2) {
-        Vector pos(2,-0.5+iterator,0);          //position (2,x,y)
-        Vector rot(1,0);            //rotation (1,theta)
+    while (iterator < 3) {
+        Vector pos(2,-0.5+iterator*0.4,0);          //position (2,x,y)
+        Vector rot(1,0.1);            //rotation (1,theta)
         double mass = 1;            //mass (kg)
-        Color fill(0.,0.5,1.);       //fillcolor
+        Color fill(0.,0.3*iterator,1.);       //fillcolor
         Color stroke(0.,0.5,1.);     //strokecolor
         Vector dim(2,0.25,0.25);    //dimensions (2,w,h)
-        Vector velocity(2,0,4*iterator);
+        Vector velocity(2,0,iterator*2);
         double halfLine = 0.1;
+        double elasticity = 1;
         //vector<Vector> edge;
         //vector<Vector> vert;
 
         //Rectangle* rect = new SRectangle(pos, rot, mass, fill, stroke, velocity, dim);
-        SCircle* circle = new SCircle(pos, rot, mass, fill, stroke, velocity, 0.1);
+        Shape* circle = new SCircle(pos, rot, mass, fill, stroke, velocity, elasticity, 0.1);
         //Capsule* capsule = new SCapsule(pos, rot, mass, fill, stroke, velocity, halfLine, 0.1);
 
         shapes.push_back(circle);
@@ -55,7 +56,9 @@ int Kernel::start() {
         iterator += 1;
     }
 
-    constraints.push_back(new DistanceConstraint(*shapes.at(0), *shapes.at(1), Vector(2, 0, 0), Vector(2, -0, -0)));
+    constraints.push_back(new DistanceConstraint(*shapes.at(0), *shapes.at(1), Vector(2, 0, 0), Vector(2, 0, 0)));
+    constraints.push_back(new DistanceConstraint(*shapes.at(1), *shapes.at(2), Vector(2, 0, 0), Vector(2, 0, 0)));
+
 
     // Main loop
     bool isRunning = true;
@@ -146,14 +149,28 @@ void Kernel::update(int iFrame, double iTime, double dT, vector<Shape*>* shapes,
     
     cout << "\rFrame: " << iFrame << "\tTime Passed (sec): " << iTime << "\tdT: " << std::fixed << std::setprecision(5) << dT << "\tFPS: " << std::fixed << std::setprecision(5) << 1 / dT << "                 ";
 
+    for (int i = 0; i < shapes->size(); i ++) {
+        for (int j = i+1; j < shapes->size(); j ++) {
+            Collision obj = shapes->at(i)->collideWith(*shapes->at(j));
+
+            if (obj.collide) {
+                shapes->at(i)->updateCollision(obj, shapes->at(j));
+            }
+        }
+    }
+
     for (int i = 0; i < constraints->size(); i ++) {
         //cout << "\nConstraint Address: " << constraints->at(i);// << " Shape A Address: " << constraints->at(i)->A << " Shape B Address: " << constraints->at(i)->B;
-        constraints->at(i)->update();
+        constraints->at(i)->update(0.001);//dT);
     }
 
     for (int i = 0; i < shapes->size(); i ++) {
         //shapes->at(i)->update(dT);
-        shapes->at(i)->smartUpdate(0.001);//dT);
+        
+        
+        shapes->at(i)->smartUpdate(0.001, shapes);//dT);
+
+
     }
 }
 

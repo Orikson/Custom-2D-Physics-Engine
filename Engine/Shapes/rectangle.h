@@ -6,7 +6,7 @@
 
 class Rectangle: public Shape {
     public:
-        Rectangle(Vector &position, Vector &rotation, double mass, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &dimensions);//, vector<Vector> &edge, vector<Vector> &vert);
+        Rectangle(Vector &position, Vector &rotation, double mass, Color &fillColor, Color &strokeColor, Vector &velocity, double elasticity, Vector &dimensions);//, vector<Vector> &edge, vector<Vector> &vert);
         Rectangle();
         ~Rectangle();
         
@@ -26,7 +26,7 @@ class Rectangle: public Shape {
         
         void draw2D() override;
         void update(double dT) override;
-        Collision collideWith(Shape shape) override;
+        Collision collideWith(Shape &shape) override;
         virtual Collision collideWithFloor() override;
 
         

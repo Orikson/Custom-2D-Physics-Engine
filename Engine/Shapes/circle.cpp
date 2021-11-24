@@ -7,8 +7,8 @@
  * @param strokeColor 3D vector representing the stroke color of the shape (applicable only in 2D drawing)
  * @param radius radius of the n-dimensional spheroid
  */
-Circle::Circle(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double radius) :
-    Shape(position, rotation, massOf, fillColor, strokeColor, velocity), r(radius) {
+Circle::Circle(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double elasticity, double radius) :
+    Shape(position, rotation, massOf, fillColor, strokeColor, velocity, elasticity), r(radius) {
     // Moment of Inertia is constructed from 3 column vectors representing rotation about the X, Y, and Z axes
     // 2mr^2/5
     double I = 2*massOf*radius*radius/5;
@@ -27,6 +27,10 @@ Circle::Circle(Vector &position, Vector &rotation, double massOf, Color &fillCol
 
     angvel.setAs(Vector(1, 0));
     angacl.setAs(Vector(1, 0));
+}
+
+Circle::~Circle() {
+    
 }
 
 /**
@@ -57,8 +61,20 @@ void Circle::update(double dT) {
  * @param shape shape to check the collision with
  * @return object describing the collision (or lack thereof)
  */
-Collision Circle::collideWith(Shape shape) {
+Collision Circle::collideWith(Shape &shape) {
+    
+}
 
+Collision Circle::collideWith(Circle &shape) {
+    
+}
+
+Collision Circle::collideWith(Capsule &shape) {
+    
+}
+
+Collision Circle::collideWith(Rectangle &shape) {
+    
 }
 
 Collision Circle::collideWithFloor() {

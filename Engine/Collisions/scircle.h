@@ -6,13 +6,14 @@
 
 class SCircle: public Circle {
     public:
-        SCircle(Vector &position, Vector &rotation, double mass, Color &fillColor, Color &strokeColor, Vector &velocity, double radius);
+        SCircle(Vector &position, Vector &rotation, double mass, Color &fillColor, Color &strokeColor, Vector &velocity, double elasticity, double radius);
         SCircle();
         ~SCircle();
         
-        Collision collideWith(Circle circle);
-        Collision collideWith(Capsule capsule);
-        Collision collideWith(Rectangle rectangle);
+        Collision collideWith(Shape &shape) override;
+        Collision collideWith(Circle &circle) override;
+        Collision collideWith(Capsule &capsule) override;
+        Collision collideWith(Rectangle &rectangle) override;
 
         Collision collideWithFloor() override;
 };

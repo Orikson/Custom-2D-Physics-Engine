@@ -10,15 +10,15 @@ class DistanceConstraint: public Constraint {
         DistanceConstraint();
         ~DistanceConstraint();
 
-        void jacobian();
+        void setup();
 
-        void update() override;
+        void update(double dT) override;
         
         Vector rA;
         Vector rB;
 
-        // hardcoded for 2D (hence double instead of vector)
-        
+        double target;
+        double mass;
 
 };
 

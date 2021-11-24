@@ -8,10 +8,12 @@
  * @param halfLine magnitude from center of mass of half the line defining the capsule
  * @param radius radius of the n-dimensional capsule
  */
-SCapsule::SCapsule(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double halfLine, double radius) :
-    Capsule(position, rotation, massOf, fillColor, strokeColor, velocity, halfLine, radius) {
-    
+SCapsule::SCapsule(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double elasticity, double halfLine, double radius) :
+    Capsule(position, rotation, massOf, fillColor, strokeColor, velocity, elasticity, halfLine, radius) {
+    name = "capsule";
 }
+
+Collision SCapsule::collideWith(Shape &shape) { }
 
 /**
  * Overload of generic shape collision, specifically for circles. 
@@ -19,13 +21,13 @@ SCapsule::SCapsule(Vector &position, Vector &rotation, double massOf, Color &fil
  * @param circle smart circle to check the collision with
  * @return object describing the collision (or lack thereof)
  */
-Collision SCapsule::collideWith(SCircle circle) {
+Collision SCapsule::collideWith(Circle &circle) {
     /* everything is the same as our circle -> capsule collision except inverted
         however, inversions about a point exist as the same point,
         thus we can call the same function representing the collision between circle -> capsule
         and only negate the normal */
     
-    return circle.collideWith(*this).neg();
+    //return circle.collideWith(*this).neg();
 }
 
 /**
@@ -33,7 +35,7 @@ Collision SCapsule::collideWith(SCircle circle) {
  * @param capsule capsule to check the collision with
  * @return object describing the collision (or lack thereof)
  */
-Collision SCapsule::collideWith(Capsule capsule) {
+Collision SCapsule::collideWith(Capsule &capsule) {
     bool collide;
     Vector normal;
     double penetration;
@@ -47,7 +49,7 @@ Collision SCapsule::collideWith(Capsule capsule) {
  * @param rectangle rectangle to check the collision with
  * @return object describing the collision (or lack thereof)
  */
-Collision SCapsule::collideWith(Rectangle rectangle) {
+Collision SCapsule::collideWith(Rectangle &rectangle) {
 
 }
 

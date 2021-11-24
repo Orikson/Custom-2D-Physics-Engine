@@ -52,6 +52,8 @@ template<typename Base, typename T> inline bool instanceof(const T*) {
 
 
 /*=======CLASS DEFINITIONS=======*/
+#include "classes.h"
+
 #include "Engine/Graphics/graphics.h"
 
 #include "Engine/Vectors/vector.h"
@@ -66,8 +68,12 @@ template<typename Base, typename T> inline bool instanceof(const T*) {
 #include "Engine/Collisions/scircle.h"
 #include "Engine/Collisions/scapsule.h"
 #include "Engine/Collisions/srectangle.h"
+#include "Engine/Collisions/collisions.h"
 
 #include "Engine/Physics/Constraints/constraint.h"
 #include "Engine/Physics/Constraints/distance.h"
+
+#include "Engine/Shapes/circle.cpp"
+#include "Engine/Shapes/shapes.cpp"
 
 #endif

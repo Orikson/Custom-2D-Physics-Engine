@@ -8,7 +8,7 @@ class Constraint {
         Constraint(Shape &A, Shape &B);
         Constraint();
 
-        virtual void update();
+        virtual void update(double dT);
 
         Shape *A;
         Shape *B;

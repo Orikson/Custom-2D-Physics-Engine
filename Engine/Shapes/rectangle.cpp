@@ -64,8 +64,8 @@ void Rectangle::grayIterate(int depth, void (Rectangle::*f)(vector<int> &)) {
  * @param strokeColor 3D vector representing the stroke color of the shape (applicable only in 2D drawing)
  * @param dimensions dimensions of the n-dimensional rectoid
  */
-Rectangle::Rectangle(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, Vector &dimensions) : 
-    Shape(position, rotation, massOf, fillColor, strokeColor, velocity), dim(dimensions) {
+Rectangle::Rectangle(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double elasticity, Vector &dimensions) : 
+    Shape(position, rotation, massOf, fillColor, strokeColor, velocity, elasticity), dim(dimensions) {
     // 2d has 4 points, 3d has 8, 4d has 16 (2^n points for dimensions n)
     
     vector<Vector*> verticies;
@@ -190,7 +190,7 @@ void Rectangle::updateVertices() {
  * @param shape object of Shape with similar polygonic structure to Rectangle, to check collision with
  * @return object describing the collision (or lack thereof)
  */
-Collision Rectangle::collideWith(Shape shape) {
+Collision Rectangle::collideWith(Shape &shape) {
     
 }
 

@@ -6,8 +6,8 @@
  * @param fillColor 3D vector representing the fill color of the shape 
  * @param strokeColor 3D vector representing the stroke color of the shape (applicable only in 2D drawing)
  */
-Shape::Shape(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity) : 
-    com(position), rot(rotation), fillColor3f(fillColor), strokeColor3f(strokeColor), vel(velocity) {
+Shape::Shape(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double elasticity) : 
+    com(position), rot(rotation), fillColor3f(fillColor), strokeColor3f(strokeColor), vel(velocity), elasticity(elasticity) {
     mass = massOf;
     invMass = 1/mass;
 
@@ -84,7 +84,7 @@ void Shape::naiveUpdate(double dT) {
     
     // integrate angular acceleration and velocity to update rotation vector
     // hardcoded for 2D
-    angvel.mAdd(sumTorque.ntimes(invMoI.at(0).getAt(0)*dT));
+    //angvel.mAdd(sumTorque.ntimes(invMoI.at(0).getAt(0)*dT));
     // dampen
     angvel.mMultScalar(DAMPING);
     // integrate for angular position
@@ -98,7 +98,7 @@ void Shape::naiveUpdate(double dT) {
  * Smart update collisions after naive update already called
  * @param dT change in time
  */
-void Shape::smartUpdate(double dT) {
+void Shape::smartUpdate(double dT, vector<Shape*>* shapes) {
     // check for collision with floor
     Collision floor = collideWithFloor();
     if (floor.collide) {
@@ -110,7 +110,26 @@ void Shape::smartUpdate(double dT) {
     naiveUpdate(dT);
     
     // check for collisions
+    /*for (int i = 0; i < shapes->size(); i ++) {
+        if (shapes->at(i) != this) {
+            cout << "\n1";
+            Collision obj = collideWith(*shapes->at(i));
 
+            //Collision obj = Collisions::collide(((SCircle)(*this)), ((SCircle)(*shapes->at(i))));
+
+            if (obj.collide) {
+                Vector vab = vel.nminus((*shapes->at(i)).vel);
+                double vn = Vector::dot(vab, obj.dir);
+                
+                double epsilon = (elasticity + (*shapes->at(i)).elasticity)/2;
+
+                double impulse = -(1 + epsilon) * vn / (Vector::dot(obj.dir, obj.dir) * (invMass + (*shapes->at(i)).invMass));
+
+                vel.mAdd(obj.dir.ntimes(impulse * invMass));
+                (*shapes->at(i)).vel.mAdd(obj.dir.ntimes(impulse * (*shapes->at(i)).invMass));
+            }
+        }
+    }*/
 
     // update position/angle to avoid clipping
 
@@ -128,12 +147,42 @@ void Shape::smartUpdate(double dT) {
     sumForces = Vector(2, 0, 0);
 }
 
+/** 
+ * Update object given collision object
+ */
+void Shape::updateCollision(Collision collision, Shape *shape) {
+    Vector vab = vel.nminus(shape->vel);
+    double vn = Vector::dot(vab, collision.dir);
+                
+    double epsilon = (elasticity + shape->elasticity)/2;
+    
+    double impulse = -(1 + epsilon) * vn / (Vector::dot(collision.dir, collision.dir) * (invMass + shape->invMass));
+
+    //cout << "\nImpulse: " << impulse;
+    //cout << "\nCurrent Velocity: " << vel.getAt(0) << " " << vel.getAt(1);
+    vel.mAdd(collision.dir.ntimes(impulse * invMass));
+    //cout << "\nSubsequent Velocity: " << vel.getAt(0) << " " << vel.getAt(1) << "\n";
+    shape->vel.mSubtract(collision.dir.ntimes(impulse * shape->invMass));
+
+    com.mAdd(collision.dir.ntimes(collision.pen*2));
+    shape->com.mSubtract(collision.dir.ntimes(collision.pen*2));
+    com.mAdd(vel.ntimes(0.001));
+    shape->com.mAdd(shape->vel.ntimes(0.001));
+
+}
+
 /**
  * Empty function to be overrided by subclasses of Shape
  * @param shape a parameter to make the compiler happy
  * @return nothing
  */
-Collision Shape::collideWith(Shape shape) { }
+Collision Shape::collideWith(Shape &shape) { }
+
+Collision Shape::collideWith(Circle &shape) { }
+
+Collision Shape::collideWith(Capsule &shape) { }
+
+Collision Shape::collideWith(Rectangle &shape) { }
 
 /**
  * Empty function to be overrided by subclasses of Shape

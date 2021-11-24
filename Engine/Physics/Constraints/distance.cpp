@@ -6,7 +6,17 @@
  * @param rB vector representing a point on shape B that is tethered
  */
 DistanceConstraint::DistanceConstraint(Shape &A, Shape &B, Vector rA, Vector rB) : Constraint(A, B), rA(rA), rB(rB) {
-    
+    setup();
+}
+
+/**
+ * Setup distance constraint
+ */
+void DistanceConstraint::setup() {
+    Vector r1 = rA.rotate(A->rot.getAt(0));
+    Vector r2 = rB.rotate(B->rot.getAt(0));
+
+    target = (A->com.nadd(r1)).nminus(B->com.nadd(r2)).mag();
 }
 
 /**
@@ -19,7 +29,7 @@ DistanceConstraint::DistanceConstraint() {
 /**
  * Update velocities of constrained shapes
  */
-void DistanceConstraint::update() {
+void DistanceConstraint::update(double dT) {
     Vector r1 = rA.rotate(A->rot.getAt(0));
     Vector r2 = rB.rotate(B->rot.getAt(0));
 
@@ -42,12 +52,14 @@ void DistanceConstraint::update() {
     Vector tempVB = Vector::cross(Vector(3, 0, 0, tempB), Vector(3, r2.getAt(0), r2.getAt(1), 0));
     double massLin = A->invMass + B->invMass;
     double massRot = Vector::dot(Vector(3, abn.getAt(0), abn.getAt(1), 0), tempVA.nadd(tempVB));
-    double mass = massLin + massRot;
+    double mass = massLin + abs(massRot);
 
     if (mass > 0) {
         double b = 0;
 
-        // ADD baumgarte scalar
+        double dist = ab.mag() - target;
+        double baumgarte = 0.1;
+        b = -(baumgarte / dT) * dist;
 
         double jn = -(abnVel + b) / mass;
 

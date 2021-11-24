@@ -7,9 +7,25 @@
  * @param strokeColor 3D vector representing the stroke color of the shape (applicable only in 2D drawing)
  * @param radius radius of the n-dimensional spheroid
  */
-SCircle::SCircle(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double radius) :
-    Circle(position, rotation, massOf, fillColor, strokeColor, velocity, radius) {
-    
+SCircle::SCircle(Vector &position, Vector &rotation, double massOf, Color &fillColor, Color &strokeColor, Vector &velocity, double elasticity, double radius) :
+    Circle(position, rotation, massOf, fillColor, strokeColor, velocity, elasticity, radius) {
+    name = "circle";
+}
+
+/**
+ * Generic shape collision
+ * @param shape shape to check the collision with
+ * @return object describing the collision (or lack thereof)
+ */
+Collision SCircle::collideWith(Shape &shape) { 
+    if (auto circle = dynamic_cast<Circle*>(&shape)) {
+        // handle Circle-Circle collision
+        return this->collideWith(*circle);
+    } else if (auto capsule = dynamic_cast<Capsule*>(&shape)) {
+        // handle Circle-Capsule collision
+    } else {
+        // default collision handling here
+    }
 }
 
 /**
@@ -17,7 +33,7 @@ SCircle::SCircle(Vector &position, Vector &rotation, double massOf, Color &fillC
  * @param circle circle to check the collision with
  * @return object describing the collision (or lack thereof)
  */
-Collision SCircle::collideWith(Circle circle) {
+Collision SCircle::collideWith(Circle &circle) {
     bool collide;
     Vector normal;
     double penetration;
@@ -30,9 +46,10 @@ Collision SCircle::collideWith(Circle circle) {
     if (!collide) {
         return Collision(false);
     }
-
+    
     // calculate normal
-    normal = Vector::norm(Vector::subtract(com, circle.com));
+    normal = Vector::subtract(com, circle.com);
+    normal = normal.ntimes(1/normal.mag());
 
     // calculate penetration distance
     penetration = abs(temp.mag() - r - circle.r);
@@ -44,8 +61,7 @@ Collision SCircle::collideWith(Circle circle) {
     if (temp.mag() == 0) {
         // if centers coincide, set normal of collision to the up direction
         // probably would only happen if an object spawns directly on top of another one anyways
-        normal = Vector::multScalar(com, 0);
-        normal.setAt(1,1);
+        normal.setAs(Vector(2, 0, 1));
         
         touching.clear();
     }
@@ -58,7 +74,7 @@ Collision SCircle::collideWith(Circle circle) {
  * @param capsule capsule to check the collision with
  * @return object describing the collision (or lack thereof)
  */
-Collision SCircle::collideWith(Capsule capsule) {
+Collision SCircle::collideWith(Capsule &capsule) {
     bool collide;
     Vector normal;
     double penetration;
@@ -99,7 +115,7 @@ Collision SCircle::collideWith(Capsule capsule) {
  * @param rectangle rectangle to check the collision with
  * @return object describing the collision (or lack thereof)
  */
-Collision SCircle::collideWith(Rectangle rectangle) {
+Collision SCircle::collideWith(Rectangle &rectangle) {
     bool collide;
     Vector normal;
     double penetration;
