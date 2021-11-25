@@ -68,9 +68,9 @@ void Shape::naiveUpdate(double dT) {
     // apply gravity
     int s = com.getSize();
     if (s == 2) {
-        addF(Vector(2, 0, G));
+        addF(Vector(2, 0, mass*G));
     } else if (s == 3) {
-        addF(Vector(3, 0, G, 0));
+        addF(Vector(3, 0, mass*G, 0));
     }
 
     // integrate acceleration over time to get velocity
@@ -105,6 +105,10 @@ void Shape::smartUpdate(double dT, vector<Shape*>* shapes) {
         com.mAdd(floor.dir.ntimes(floor.pen*2));
         vel.vectorContents.at(1) = vel.getAt(1)*-1;
         //cout << "\n" << vel.vectorContents.at(1);
+    }
+
+    if (vel.mag() < 0.01) {
+        //vel.setAs(Vector(2, 0, 0));
     }
 
     naiveUpdate(dT);

@@ -34,7 +34,8 @@ int Kernel::start() {
     constraints.reserve(3);
     
     int iterator = 0;
-    while (iterator < 3) {
+    // straight line of 3 circles (increasing velocities)
+    /*while (iterator < 0) {
         Vector pos(2,-0.5+iterator*0.4,0);          //position (2,x,y)
         Vector rot(1,0.1);            //rotation (1,theta)
         double mass = 1;            //mass (kg)
@@ -54,10 +55,107 @@ int Kernel::start() {
         shapes.push_back(circle);
         
         iterator += 1;
+    }*/
+    // triangle
+    /*while (iterator < 3) {
+        //Vector pos(2,-0.5+iterator*0.4,0);          //position (2,x,y)
+        Vector pos;
+        if (iterator == 0) {
+            pos.setAs(Vector(2, -0.2, -0.2));
+        } else if (iterator == 1) {
+            pos.setAs(Vector(2, 0.2, -0.2));
+        } else {
+            pos.setAs(Vector(2, 0, 0.2));
+        }
+        Vector rot(1,0);            //rotation (1,theta)
+        double mass = 0.001;            //mass (kg)
+        Color fill(0.,0.3*iterator,1.);       //fillcolor
+        Color stroke(0.,0.5,1.);     //strokecolor
+        Vector dim(2,0.25,0.25);    //dimensions (2,w,h)
+        Vector velocity(2,0,0);
+        double halfLine = 0.1;
+        double elasticity = 1;
+        //vector<Vector> edge;
+        //vector<Vector> vert;
+
+        //Rectangle* rect = new SRectangle(pos, rot, mass, fill, stroke, velocity, dim);
+        Shape* circle = new SCircle(pos, rot, mass, fill, stroke, velocity, elasticity, 0.1);
+        //Capsule* capsule = new SCapsule(pos, rot, mass, fill, stroke, velocity, halfLine, 0.1);
+
+        shapes.push_back(circle);
+        
+        iterator += 1;
+    }*/
+    // rectangle
+    /*while (iterator < 4) {
+        //Vector pos(2,-0.5+iterator*0.4,0);          //position (2,x,y)
+        Vector pos;
+        if (iterator == 0) {
+            pos.setAs(Vector(2, -0.2, -0.2));
+        } else if (iterator == 1) {
+            pos.setAs(Vector(2, 0.2, -0.2));
+        } else if (iterator == 2) {
+            pos.setAs(Vector(2, 0.2, 0.2));
+        } else {
+            pos.setAs(Vector(2, -0.2, 0.2));
+        }
+        Vector rot(1,0);            //rotation (1,theta)
+        double mass = 0.001;            //mass (kg)
+        Color fill(0.,0.3*iterator,1.);       //fillcolor
+        Color stroke(0.,0.5,1.);     //strokecolor
+        Vector dim(2,0.25,0.25);    //dimensions (2,w,h)
+        Vector velocity(2,0,0);
+        double halfLine = 0.1;
+        double elasticity = 1;
+        //vector<Vector> edge;
+        //vector<Vector> vert;
+
+        //Rectangle* rect = new SRectangle(pos, rot, mass, fill, stroke, velocity, dim);
+        Shape* circle = new SCircle(pos, rot, mass, fill, stroke, velocity, elasticity, 0.001);
+        //Capsule* capsule = new SCapsule(pos, rot, mass, fill, stroke, velocity, halfLine, 0.1);
+
+        shapes.push_back(circle);
+        
+        iterator += 1;
+    }*/
+    // basic circle
+    int n = 3;
+    while (iterator < n) {
+        //Vector pos(2,-0.5+iterator*0.4,0);          //position (2,x,y)
+        Vector pos(2, 0.5*cos(2*PI/n*iterator), 0.5*sin(2*PI/n*iterator));
+        Vector rot(1,0);            //rotation (1,theta)
+        double mass = 0.001;            //mass (kg)
+        Color fill(0.,0.3*iterator,1.);       //fillcolor
+        Color stroke(0.,0.5,1.);     //strokecolor
+        Vector dim(2,0.25,0.25);    //dimensions (2,w,h)
+        Vector velocity(2,0,0);
+        double halfLine = 0.1;
+        double elasticity = 1;
+        //vector<Vector> edge;
+        //vector<Vector> vert;
+
+        //Rectangle* rect = new SRectangle(pos, rot, mass, fill, stroke, velocity, dim);
+        Shape* circle = new SCircle(pos, rot, mass, fill, stroke, velocity, elasticity, 0.001);
+        //Capsule* capsule = new SCapsule(pos, rot, mass, fill, stroke, velocity, halfLine, 0.1);
+
+        shapes.push_back(circle);
+        
+        iterator += 1;
     }
 
-    constraints.push_back(new DistanceConstraint(*shapes.at(0), *shapes.at(1), Vector(2, 0, 0), Vector(2, 0, 0)));
-    constraints.push_back(new DistanceConstraint(*shapes.at(1), *shapes.at(2), Vector(2, 0, 0), Vector(2, 0, 0)));
+    //constraints.push_back(new DistanceConstraint(*shapes.at(0), *shapes.at(1), Vector(2, 0, 0), Vector(2, 0, 0)));
+    //constraints.push_back(new DistanceConstraint(*shapes.at(1), *shapes.at(2), Vector(2, 0, 0), Vector(2, 0, 0)));
+    //constraints.push_back(new SpringConstraint(*shapes.at(0), *shapes.at(1), 0.5, 0.9999));
+    //constraints.push_back(new SpringConstraint(*shapes.at(0), *shapes.at(2), 0.5, 0.9999));
+    //constraints.push_back(new SpringConstraint(*shapes.at(0), *shapes.at(3), 0.5, 0.9999));
+    //constraints.push_back(new SpringConstraint(*shapes.at(1), *shapes.at(2), 0.5, 0.9999));
+    //constraints.push_back(new SpringConstraint(*shapes.at(1), *shapes.at(3), 0.5, 0.9999));
+    //constraints.push_back(new SpringConstraint(*shapes.at(2), *shapes.at(3), 0.5, 0.9999));
+    for (int i = 0; i < shapes.size(); i ++) {
+        for (int j = i+1; j < shapes.size(); j++) {
+            constraints.push_back(new SpringConstraint(*shapes.at(i), *shapes.at(j), 0.7, 0.9995));
+        }
+    }
 
 
     // Main loop
@@ -183,11 +281,14 @@ void Kernel::update(int iFrame, double iTime, double dT, vector<Shape*>* shapes,
  */
 void Kernel::render(SDL_Window* window, int iFrame, double iTime, vector<Shape*>* shapes) {
     double theta = (double)iFrame/10000;
-    
+    glBegin(GL_POLYGON);
+        
     // draw shapes
     for (int i = 0; i < shapes->size(); i ++) {
-        shapes->at(i)->draw2D();
-    }
+        //shapes->at(i)->draw2D();
+            glColor3f(0, 0, 1); glVertex3f(shapes->at(i)->com.getAt(0), shapes->at(i)->com.getAt(1), 0);
+    }    
+    glEnd();
     
     
     // flush gl context to screen
