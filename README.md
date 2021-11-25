@@ -4,7 +4,7 @@ A Custom 2D Physics Engine written in C++, designed in a modular form such that 
 The engine seeks to demonstrate primarily physical properties of structurally static objects, although, in future projects, will be used to implement optical phenomena and dynamic object structures such as liquids, gasses, stress, tearing, and the like. Instances of this engine, however, will be able to simulate certain non-real properties, such as immobility (in particular regards to axles), or masslessness. A full list of engine functionalities can be found within its corresponding section.
 
 ## Visuals
-N/A
+![SoftBodySeptagon](https://user-images.githubusercontent.com/42471346/143506986-2c010932-3f43-4af1-811a-2f948a2f436b.gif)
 
 ## Installation
 
